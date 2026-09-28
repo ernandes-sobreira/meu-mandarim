@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>Mandarim Acadêmico</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--ink:#1b1b1f;--muted:#6b6f7b;--line:#e8e9ee;--mist:#f4f5f8;--ver:#c73e3a;--ver-soft:#fbe9e7;--jade:#1f8a70;--jade-soft:#e3f4ee;--indigo:#3d5afe;--indigo-soft:#e8ecff;--gold:#e0a52d;--gold-soft:#fcf3dc;--plum:#7b3fa0;--plum-soft:#f1e7f8;--sky:#0ea5c9;--sky-soft:#e0f5fb}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:#fff}
+body{color:var(--ink);font:16px/1.55 "Manrope",system-ui,sans-serif;padding-top:env(safe-area-inset-top,0px)}
+.zh,.hz{font-family:"Noto Serif SC","Manrope",serif}
+.wrap{max-width:640px;margin:0 auto;padding:12px 18px 100px}
+header{display:flex;align-items:center;justify-content:space-between;padding:6px 0 14px}
+.brand{display:flex;align-items:center;gap:10px}
+.seal{width:36px;height:36px;border-radius:9px;background:var(--ver);color:#fff;display:grid;place-items:center;font-family:"Noto Serif SC",serif;font-size:20px;font-weight:700}
+.brand b{font-size:17px;font-weight:800;letter-spacing:-.2px}
+.brand span{display:block;font-size:12px;color:var(--muted);font-weight:500;margin-top:-2px}
+.gear{width:38px;height:38px;border-radius:50%;background:var(--mist);border:0;display:grid;place-items:center;color:var(--muted);cursor:pointer}
+.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px;margin-bottom:14px}
+.card.tint{border:0}
+.hero{border:0;background:linear-gradient(160deg,#fff 0%,#fff6f5 100%);border:1px solid #f4dcda;display:flex;gap:16px;align-items:center}
+.hero .big{font-family:"Noto Serif SC",serif;font-size:84px;line-height:1;font-weight:700;color:var(--ink);min-width:96px;text-align:center}
+.hero .py{color:var(--ver);font-weight:700;font-size:18px}
+.hero .pt{color:var(--muted);font-size:14px;margin-top:2px}
+.hero small{display:block;color:var(--muted);font-size:12px;margin-bottom:4px}
+.ringwrap{display:flex;align-items:center;gap:16px}
+.ring{position:relative;width:88px;height:88px;flex:none}
+.ring svg{transform:rotate(-90deg)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:20px;font-weight:800}
+.ring b small{font-size:11px;color:var(--muted);font-weight:600;display:block;text-align:center}
+.stat{display:flex;gap:8px}
+.stat div{flex:1;background:var(--mist);border-radius:14px;padding:12px 10px;text-align:center}
+.stat b{display:block;font-size:22px;font-weight:800;letter-spacing:-.5px}
+.stat span{font-size:12px;color:var(--muted);font-weight:600}
+h2{font-size:20px;font-weight:800;letter-spacing:-.3px;margin:6px 0 10px}
+h3{font-size:15px;font-weight:800;margin:0 0 8px}
+p{margin:6px 0}
+.sm{font-size:13px;color:var(--muted)}
+button{font:inherit;border:0;border-radius:14px;padding:13px 18px;cursor:pointer;background:var(--ink);color:#fff;font-weight:700;transition:transform .08s}
+button:active{transform:scale(.97)}
+button.pri{background:var(--ver)}
+button.sec{background:var(--mist);color:var(--ink)}
+button.ghost{background:#fff;border:1.5px solid var(--line);color:var(--ink)}
+button.full{width:100%}
+button.lg{font-size:17px;padding:16px}
+button:disabled{opacity:.45}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.actions button{padding:16px 12px;border-radius:16px;text-align:left;display:flex;flex-direction:column;gap:4px;line-height:1.25}
+.actions small{font-weight:500;opacity:.85;font-size:12px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 12px}
+.chip{background:var(--mist);color:var(--ink);padding:7px 13px;border-radius:999px;font-size:13px;font-weight:700;border:1.5px solid transparent}
+.chip.on{background:#fff;border-color:var(--ink)}
+.modcard{display:flex;gap:14px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:18px;margin-bottom:10px;background:#fff}
+.modcard .ico{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-family:"Noto Serif SC",serif;font-size:26px;font-weight:700;flex:none}
+.modcard .t{flex:1;min-width:0}
+.modcard .t b{display:block;font-size:15px}
+.modcard .t span{font-size:12px;color:var(--muted)}
+.bar{height:6px;background:var(--mist);border-radius:6px;overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;border-radius:6px}
+.modcard .btns{display:flex;flex-direction:column;gap:6px}
+.modcard .btns button{padding:8px 12px;font-size:13px;border-radius:10px}
+.lvl{display:inline-block;font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;margin-left:6px;vertical-align:middle}
+.lvl.b{background:var(--jade-soft);color:var(--jade)}.lvl.i{background:var(--plum-soft);color:var(--plum)}
+/* exercícios */
+.ex{border:1px solid var(--line);border-radius:22px;padding:22px 20px;background:#fff}
+.exhead{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:6px}
+.exhead span:last-child{padding:3px 10px;border-radius:999px;background:var(--mist);color:var(--ink)}
+.prog{height:5px;background:var(--mist);border-radius:5px;overflow:hidden;margin-bottom:22px}
+.prog i{display:block;height:100%;background:var(--ver);border-radius:5px;transition:width .3s}
+.qzh{font-family:"Noto Serif SC",serif;font-size:46px;line-height:1.25;text-align:center;font-weight:600;margin:6px 0 2px}
+.qpy{text-align:center;color:var(--ver);font-weight:700;font-size:20px}
+.qpt{text-align:center;color:var(--muted);font-size:17px;margin-top:4px}
+.qask{text-align:center;font-size:20px;font-weight:800;margin:6px 0 4px;line-height:1.3}
+.hint{text-align:center;font-size:13px;color:var(--muted);margin:2px 0 14px}
+.opt{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid var(--line);color:var(--ink);margin-top:9px;font-weight:600;padding:14px 16px;border-radius:14px;font-size:16px}
+.opt .hz{font-size:22px;font-weight:600}
+.opt .p{color:var(--muted);font-weight:500;font-size:13px;margin-left:6px}
+.opt.ok{border-color:var(--jade);background:var(--jade-soft)}
+.opt.bad{border-color:var(--ver);background:var(--ver-soft)}
+.speak{width:56px;height:56px;border-radius:50%;background:var(--indigo-soft);color:var(--indigo);font-size:22px;display:grid;place-items:center;margin:10px auto;padding:0}
+.mic{width:92px;height:92px;border-radius:50%;background:var(--ver);color:#fff;font-size:36px;display:grid;place-items:center;margin:16px auto;padding:0;box-shadow:0 10px 24px rgba(199,62,58,.28)}
+.mic.rec{animation:pulse 1s infinite}
+@keyframes pulse{50%{transform:scale(1.07)}}
+.score{font-size:40px;font-weight:800;text-align:center;margin-top:8px}
+.tiles{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:10px 0}
+.tile{font-family:"Noto Serif SC",serif;font-size:26px;font-weight:600;width:54px;height:54px;border-radius:12px;background:#fff;border:1.5px solid var(--line);display:grid;place-items:center;padding:0;color:var(--ink)}
+.tile.used{opacity:.25}
+.slot{min-height:64px;border:2px dashed var(--line);border-radius:14px;display:flex;gap:6px;justify-content:center;align-items:center;flex-wrap:wrap;padding:6px;margin-bottom:8px}
+.slot .tile{border-color:var(--ink)}
+.mark{color:var(--ver);text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:6px}
+.pair{display:flex;gap:10px;margin-top:12px}
+.pair button{flex:1}
+.note{background:var(--gold-soft);border-radius:14px;padding:12px 14px;font-size:14px;color:#6b4d05;margin-bottom:12px}
+.err{background:var(--ver-soft);border-radius:14px;padding:12px 14px;font-size:14px;color:#8a2622}
+/* dicionário */
+.search{display:flex;align-items:center;gap:10px;background:var(--mist);border-radius:16px;padding:6px 14px;margin-bottom:8px}
+.search input{flex:1;border:0;background:none;font:inherit;font-size:16px;padding:10px 0;outline:0}
+.row{display:flex;align-items:center;gap:12px;padding:12px 4px;border-bottom:1px solid var(--line)}
+.row:last-child{border:0}
+.row .hz{font-size:24px;font-weight:600;min-width:0}
+.row .info{flex:1;min-width:0}
+.row .info span{display:block;font-size:13px;color:var(--muted)}
+.row .info em{font-style:normal;color:var(--ver);font-weight:700;font-size:13px}
+.row button{padding:8px 10px;border-radius:10px;font-size:14px}
+.detail .zh{font-size:60px;text-align:center;font-weight:700;line-height:1.2}
+.charrow{display:flex;gap:10px;overflow-x:auto;padding:6px 0}
+.charrow div{flex:none;background:var(--mist);border-radius:14px;padding:10px 12px;text-align:center;min-width:76px}
+.charrow .hz{font-size:30px;font-weight:700;display:block}
+.charrow small{display:block;color:var(--ver);font-weight:700;font-size:12px}
+.charrow span{display:block;font-size:12px;color:var(--muted);max-width:110px}
+.k{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+.k:last-child{border:0}
+input.f,select{font:inherit;padding:11px 12px;border:1.5px solid var(--line);border-radius:12px;width:100%;background:#fff}
+label{font-size:13px;color:var(--muted);font-weight:700;display:block;margin:12px 0 5px}
+canvas{max-height:200px}
+.hid{display:none}
+.c{text-align:center}
+.mt{margin-top:12px}
+.res{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.res div{background:var(--mist);border-radius:14px;padding:12px;text-align:center}
+.res b{display:block;font-size:24px;font-weight:800}
+.res span{font-size:12px;color:var(--muted);font-weight:600}
+nav{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom,0px);z-index:5}
+nav button{flex:1;background:none;color:var(--muted);border-radius:0;padding:9px 2px 8px;font-size:11px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px}
+nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+nav button.on{color:var(--ver)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* avatar e gamificação */
+.tutor{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px}
+.tutor svg{width:64px;height:64px;flex:none}
+.bubble{background:var(--mist);border-radius:18px;border-top-left-radius:4px;padding:10px 14px;flex:1}
+.bubble b{display:block;font-family:"Noto Serif SC",serif;font-size:18px}
+.bubble span{font-size:13px;color:var(--muted)}
+.xpbar{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:12px;color:var(--muted);font-weight:700}
+.xpbar .bar{flex:1;margin:0;height:8px}
+.combo{display:inline-block;background:var(--gold-soft);color:#7a5507;font-weight:800;font-size:12px;padding:3px 10px;border-radius:999px}
+.fb{margin-top:14px;border-radius:16px;padding:14px;animation:pop .25s ease-out}
+.fb.ok{background:var(--jade-soft)}.fb.bad{background:var(--ver-soft)}
+.fb h4{margin:0 0 4px;font-size:16px}
+.fb .ans{font-family:"Noto Serif SC",serif;font-size:26px;font-weight:600}
+@keyframes pop{from{transform:scale(.96);opacity:0}to{transform:scale(1);opacity:1}}
+.conf{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:9}
+.conf i{position:absolute;width:9px;height:9px;border-radius:2px;animation:fall 1.1s ease-in forwards}
+@keyframes fall{to{transform:translateY(90vh) rotate(400deg);opacity:0}}
+.badges{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.badge{text-align:center;font-size:11px;color:var(--muted);font-weight:700}
+.badge .b{width:56px;height:56px;border-radius:16px;margin:0 auto 4px;display:grid;place-items:center;font-size:24px;background:var(--mist);filter:grayscale(1);opacity:.45}
+.badge.on .b{filter:none;opacity:1;background:var(--gold-soft)}
+.lvup{position:fixed;inset:0;background:rgba(255,255,255,.95);z-index:20;display:grid;place-items:center;text-align:center;padding:24px}
+.lvup .zh{font-size:72px;font-weight:700;color:var(--ver)}
+.avatarbig svg{width:120px;height:120px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<div class="brand"><div class="seal">学</div><div><b>Mandarim Acadêmico</b><span id="sub">Universidade, clima e saúde</span></div></div>
+<button class="gear" onclick="go('settings')" aria-label="Ajustes"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+</header>
+<div id="view"></div>
+</div>
+<nav>
+<button data-v="home" class="on"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a2 2 0 0 1-2 2h-4v-7H9v7H5a2 2 0 0 1-2-2z"/></svg>Hoje</button>
+<button data-v="modules"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Módulos</button>
+<button data-v="test"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Teste</button>
+<button data-v="dict"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg>Dicionário</button>
+<button data-v="progress"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/></svg>Progresso</button>
+</nav>
+<script>
+const MODULES = [
+{id:"tons",lv:1,title:"Sons e tons",desc:"Os quatro tons e sílabas base",items:[
+{zh:"妈",py:"mā",pt:"mãe (1º tom, alto e plano)"},
+{zh:"麻",py:"má",pt:"cânhamo (2º tom, sobe)"},
+{zh:"马",py:"mǎ",pt:"cavalo (3º tom, desce e sobe)"},
+{zh:"骂",py:"mà",pt:"xingar (4º tom, cai forte)"},
+{zh:"吗",py:"ma",pt:"partícula de pergunta (tom neutro)"},
+{zh:"你",py:"nǐ",pt:"você"},
+{zh:"我",py:"wǒ",pt:"eu"},
+{zh:"他",py:"tā",pt:"ele"},
+{zh:"她",py:"tā",pt:"ela"},
+{zh:"好",py:"hǎo",pt:"bom"},
+{zh:"是",py:"shì",pt:"ser"},
+{zh:"不",py:"bù",pt:"não"},
+{zh:"人",py:"rén",pt:"pessoa"},
+{zh:"中国",py:"Zhōngguó",pt:"China"},
+{zh:"巴西",py:"Bāxī",pt:"Brasil"}]},
+{id:"saud",lv:1,title:"Saudações e cortesia",desc:"O mínimo para não ficar mudo",items:[
+{zh:"你好",py:"nǐ hǎo",pt:"olá"},
+{zh:"您好",py:"nín hǎo",pt:"olá (formal, para reitor, professor sênior)"},
+{zh:"早上好",py:"zǎoshang hǎo",pt:"bom dia"},
+{zh:"晚上好",py:"wǎnshang hǎo",pt:"boa noite (ao chegar)"},
+{zh:"再见",py:"zàijiàn",pt:"tchau"},
+{zh:"谢谢",py:"xièxie",pt:"obrigado"},
+{zh:"不客气",py:"bú kèqi",pt:"de nada"},
+{zh:"对不起",py:"duìbuqǐ",pt:"desculpe"},
+{zh:"没关系",py:"méi guānxi",pt:"não tem problema"},
+{zh:"请",py:"qǐng",pt:"por favor"},
+{zh:"请问",py:"qǐngwèn",pt:"com licença, posso perguntar"},
+{zh:"是的",py:"shì de",pt:"sim"},
+{zh:"不是",py:"bú shì",pt:"não é"},
+{zh:"我不明白",py:"wǒ bù míngbai",pt:"eu não entendo"},
+{zh:"请再说一遍",py:"qǐng zài shuō yí biàn",pt:"por favor repita"},
+{zh:"请说慢一点",py:"qǐng shuō màn yìdiǎn",pt:"por favor fale mais devagar"},
+{zh:"你会说英语吗？",py:"nǐ huì shuō Yīngyǔ ma?",pt:"você fala inglês?"},
+{zh:"我的中文不好",py:"wǒ de Zhōngwén bù hǎo",pt:"meu chinês não é bom"}]},
+{id:"eu",lv:1,title:"Apresentar-se",desc:"Quem você é, de onde vem, o que faz",items:[
+{zh:"我叫 Ernandes",py:"wǒ jiào Ernandes",pt:"eu me chamo Ernandes"},
+{zh:"我是巴西人",py:"wǒ shì Bāxīrén",pt:"eu sou brasileiro"},
+{zh:"我来自巴西",py:"wǒ láizì Bāxī",pt:"eu venho do Brasil"},
+{zh:"我是教授",py:"wǒ shì jiàoshòu",pt:"eu sou professor universitário"},
+{zh:"我是生物学家",py:"wǒ shì shēngwùxuéjiā",pt:"eu sou biólogo"},
+{zh:"我在大学工作",py:"wǒ zài dàxué gōngzuò",pt:"eu trabalho na universidade"},
+{zh:"我在马托格罗索州立大学工作",py:"wǒ zài Mǎtuōgéluósuǒ zhōulì dàxué gōngzuò",pt:"eu trabalho na UNEMAT (Universidade do Estado de Mato Grosso)"},
+{zh:"我住在卡塞雷斯",py:"wǒ zhù zài Kǎsāiléisī",pt:"eu moro em Cáceres"},
+{zh:"我是研究员",py:"wǒ shì yánjiūyuán",pt:"eu sou pesquisador"},
+{zh:"我有博士学位",py:"wǒ yǒu bóshì xuéwèi",pt:"eu tenho doutorado"},
+{zh:"我在荷兰读的博士",py:"wǒ zài Hélán dú de bóshì",pt:"eu fiz o doutorado na Holanda"},
+{zh:"很高兴认识你",py:"hěn gāoxìng rènshi nǐ",pt:"prazer em conhecê-lo"},
+{zh:"你叫什么名字？",py:"nǐ jiào shénme míngzi?",pt:"como você se chama?"},
+{zh:"你是哪国人？",py:"nǐ shì nǎ guó rén?",pt:"de que país você é?"},
+{zh:"你做什么工作？",py:"nǐ zuò shénme gōngzuò?",pt:"o que você faz?"},
+{zh:"我有一个儿子",py:"wǒ yǒu yí ge érzi",pt:"eu tenho um filho"}]},
+{id:"num",lv:1,title:"Números, datas e horas",desc:"Marcar reunião, dizer o ano, contar amostras",items:[
+{zh:"一",py:"yī",pt:"um"},{zh:"二",py:"èr",pt:"dois"},{zh:"三",py:"sān",pt:"três"},
+{zh:"四",py:"sì",pt:"quatro"},{zh:"五",py:"wǔ",pt:"cinco"},{zh:"六",py:"liù",pt:"seis"},
+{zh:"七",py:"qī",pt:"sete"},{zh:"八",py:"bā",pt:"oito"},{zh:"九",py:"jiǔ",pt:"nove"},
+{zh:"十",py:"shí",pt:"dez"},{zh:"百",py:"bǎi",pt:"cem"},{zh:"千",py:"qiān",pt:"mil"},
+{zh:"万",py:"wàn",pt:"dez mil"},
+{zh:"今天",py:"jīntiān",pt:"hoje"},{zh:"明天",py:"míngtiān",pt:"amanhã"},{zh:"昨天",py:"zuótiān",pt:"ontem"},
+{zh:"星期一",py:"xīngqīyī",pt:"segunda-feira"},{zh:"星期五",py:"xīngqīwǔ",pt:"sexta-feira"},
+{zh:"现在几点？",py:"xiànzài jǐ diǎn?",pt:"que horas são?"},
+{zh:"三点半",py:"sān diǎn bàn",pt:"três e meia"},
+{zh:"上午",py:"shàngwǔ",pt:"manhã"},{zh:"下午",py:"xiàwǔ",pt:"tarde"},
+{zh:"二零二六年",py:"èr líng èr liù nián",pt:"ano de 2026"},
+{zh:"九月",py:"jiǔyuè",pt:"setembro"}]},
+{id:"uni",lv:1,title:"Na universidade",desc:"Campus, departamentos, pessoas",items:[
+{zh:"大学",py:"dàxué",pt:"universidade"},
+{zh:"教授",py:"jiàoshòu",pt:"professor titular"},
+{zh:"老师",py:"lǎoshī",pt:"professor (tratamento geral)"},
+{zh:"学生",py:"xuésheng",pt:"estudante"},
+{zh:"研究生",py:"yánjiūshēng",pt:"pós-graduando"},
+{zh:"博士生",py:"bóshìshēng",pt:"doutorando"},
+{zh:"硕士",py:"shuòshì",pt:"mestrado, mestre"},
+{zh:"博士后",py:"bóshìhòu",pt:"pós-doutorado"},
+{zh:"实验室",py:"shíyànshì",pt:"laboratório"},
+{zh:"图书馆",py:"túshūguǎn",pt:"biblioteca"},
+{zh:"教室",py:"jiàoshì",pt:"sala de aula"},
+{zh:"办公室",py:"bàngōngshì",pt:"escritório, gabinete"},
+{zh:"食堂",py:"shítáng",pt:"restaurante universitário"},
+{zh:"系",py:"xì",pt:"departamento"},
+{zh:"生物系",py:"shēngwù xì",pt:"departamento de biologia"},
+{zh:"院长",py:"yuànzhǎng",pt:"diretor de faculdade / instituto"},
+{zh:"校长",py:"xiàozhǎng",pt:"reitor"},
+{zh:"上课",py:"shàngkè",pt:"dar aula, ter aula"},
+{zh:"研究",py:"yánjiū",pt:"pesquisa, pesquisar"},
+{zh:"我教气候变化课",py:"wǒ jiāo qìhòu biànhuà kè",pt:"eu ensino a disciplina de mudanças climáticas"}]},
+{id:"dir",lv:1,title:"Orientar-se",desc:"Achar lugares no campus e na cidade",items:[
+{zh:"在哪里？",py:"zài nǎlǐ?",pt:"onde fica?"},
+{zh:"实验室在哪里？",py:"shíyànshì zài nǎlǐ?",pt:"onde fica o laboratório?"},
+{zh:"洗手间在哪里？",py:"xǐshǒujiān zài nǎlǐ?",pt:"onde fica o banheiro?"},
+{zh:"左边",py:"zuǒbian",pt:"esquerda"},{zh:"右边",py:"yòubian",pt:"direita"},
+{zh:"前面",py:"qiánmian",pt:"à frente"},{zh:"后面",py:"hòumian",pt:"atrás"},
+{zh:"直走",py:"zhí zǒu",pt:"siga reto"},
+{zh:"二楼",py:"èr lóu",pt:"segundo andar"},
+{zh:"电梯",py:"diàntī",pt:"elevador"},
+{zh:"出租车",py:"chūzūchē",pt:"táxi"},
+{zh:"地铁",py:"dìtiě",pt:"metrô"},
+{zh:"机场",py:"jīchǎng",pt:"aeroporto"},
+{zh:"酒店",py:"jiǔdiàn",pt:"hotel"},
+{zh:"我要去大学",py:"wǒ yào qù dàxué",pt:"quero ir para a universidade"},
+{zh:"多少钱？",py:"duōshao qián?",pt:"quanto custa?"},
+{zh:"远吗？",py:"yuǎn ma?",pt:"é longe?"},
+{zh:"请帮我",py:"qǐng bāng wǒ",pt:"por favor me ajude"}]},
+{id:"dia",lv:1,title:"Cotidiano e comida",desc:"Sobreviver a uma semana em campus chinês",items:[
+{zh:"水",py:"shuǐ",pt:"água"},{zh:"茶",py:"chá",pt:"chá"},{zh:"咖啡",py:"kāfēi",pt:"café"},
+{zh:"米饭",py:"mǐfàn",pt:"arroz"},{zh:"面条",py:"miàntiáo",pt:"macarrão"},
+{zh:"我不吃辣",py:"wǒ bù chī là",pt:"eu não como pimenta"},
+{zh:"我要这个",py:"wǒ yào zhège",pt:"eu quero este"},
+{zh:"买单",py:"mǎidān",pt:"a conta, por favor"},
+{zh:"好吃",py:"hǎochī",pt:"gostoso"},
+{zh:"我饿了",py:"wǒ è le",pt:"estou com fome"},
+{zh:"我累了",py:"wǒ lèi le",pt:"estou cansado"},
+{zh:"手机",py:"shǒujī",pt:"celular"},
+{zh:"无线网络",py:"wúxiàn wǎngluò",pt:"wi-fi"},
+{zh:"密码",py:"mìmǎ",pt:"senha"},
+{zh:"微信",py:"Wēixìn",pt:"WeChat"},
+{zh:"很热",py:"hěn rè",pt:"está muito quente"},
+{zh:"下雨了",py:"xià yǔ le",pt:"está chovendo"}]},
+{id:"car",lv:1,title:"Carreira e pesquisa",desc:"Falar do que você faz em uma frase",items:[
+{zh:"科学",py:"kēxué",pt:"ciência"},
+{zh:"科学家",py:"kēxuéjiā",pt:"cientista"},
+{zh:"生态学",py:"shēngtàixué",pt:"ecologia"},
+{zh:"环境",py:"huánjìng",pt:"meio ambiente"},
+{zh:"气候",py:"qìhòu",pt:"clima"},
+{zh:"论文",py:"lùnwén",pt:"artigo científico"},
+{zh:"发表",py:"fābiǎo",pt:"publicar"},
+{zh:"数据",py:"shùjù",pt:"dados"},
+{zh:"测量",py:"cèliáng",pt:"medir, medição"},
+{zh:"样本",py:"yàngběn",pt:"amostra"},
+{zh:"项目",py:"xiàngmù",pt:"projeto"},
+{zh:"合作",py:"hézuò",pt:"colaboração, colaborar"},
+{zh:"公司",py:"gōngsī",pt:"empresa"},
+{zh:"我有一家环境咨询公司",py:"wǒ yǒu yì jiā huánjìng zīxún gōngsī",pt:"eu tenho uma empresa de consultoria ambiental"},
+{zh:"我研究气候变化",py:"wǒ yánjiū qìhòu biànhuà",pt:"eu pesquiso mudanças climáticas"},
+{zh:"我研究温室气体",py:"wǒ yánjiū wēnshì qìtǐ",pt:"eu pesquiso gases de efeito estufa"},
+{zh:"我发表了一百多篇论文",py:"wǒ fābiǎo le yìbǎi duō piān lùnwén",pt:"eu publiquei mais de cem artigos"}]},
+{id:"gee",lv:2,title:"Gases de efeito estufa",desc:"Seu vocabulário central de trabalho",items:[
+{zh:"温室气体",py:"wēnshì qìtǐ",pt:"gases de efeito estufa"},
+{zh:"温室效应",py:"wēnshì xiàoyìng",pt:"efeito estufa"},
+{zh:"二氧化碳",py:"èryǎnghuàtàn",pt:"dióxido de carbono (CO2)"},
+{zh:"甲烷",py:"jiǎwán",pt:"metano (CH4)"},
+{zh:"氧化亚氮",py:"yǎnghuà yà dàn",pt:"óxido nitroso (N2O)"},
+{zh:"碳",py:"tàn",pt:"carbono"},
+{zh:"排放",py:"páifàng",pt:"emissão, emitir"},
+{zh:"通量",py:"tōngliàng",pt:"fluxo"},
+{zh:"碳通量",py:"tàn tōngliàng",pt:"fluxo de carbono"},
+{zh:"碳循环",py:"tàn xúnhuán",pt:"ciclo do carbono"},
+{zh:"碳汇",py:"tàn huì",pt:"sumidouro de carbono"},
+{zh:"碳源",py:"tàn yuán",pt:"fonte de carbono"},
+{zh:"浓度",py:"nóngdù",pt:"concentração"},
+{zh:"大气",py:"dàqì",pt:"atmosfera"},
+{zh:"全球变暖",py:"quánqiú biànnuǎn",pt:"aquecimento global"},
+{zh:"监测",py:"jiāncè",pt:"monitoramento, monitorar"},
+{zh:"传感器",py:"chuángǎnqì",pt:"sensor"},
+{zh:"我们测量甲烷和二氧化碳的通量",py:"wǒmen cèliáng jiǎwán hé èryǎnghuàtàn de tōngliàng",pt:"nós medimos fluxos de metano e CO2"},
+{zh:"湿地是甲烷的重要来源",py:"shīdì shì jiǎwán de zhòngyào láiyuán",pt:"áreas úmidas são uma fonte importante de metano"}]},
+{id:"fogo",lv:2,title:"Fogo, fumaça e ar",desc:"Queimadas, PM2.5 e qualidade do ar",items:[
+{zh:"火",py:"huǒ",pt:"fogo"},
+{zh:"野火",py:"yěhuǒ",pt:"incêndio florestal, queimada"},
+{zh:"森林火灾",py:"sēnlín huǒzāi",pt:"incêndio florestal"},
+{zh:"烧",py:"shāo",pt:"queimar"},
+{zh:"烟",py:"yān",pt:"fumaça"},
+{zh:"烟雾",py:"yānwù",pt:"fumaça, névoa de poluição"},
+{zh:"空气质量",py:"kōngqì zhìliàng",pt:"qualidade do ar"},
+{zh:"空气污染",py:"kōngqì wūrǎn",pt:"poluição do ar"},
+{zh:"细颗粒物",py:"xì kēlìwù",pt:"material particulado fino (PM2.5)"},
+{zh:"灰",py:"huī",pt:"cinza"},
+{zh:"干旱",py:"gānhàn",pt:"seca"},
+{zh:"旱季",py:"hànjì",pt:"estação seca"},
+{zh:"雨季",py:"yǔjì",pt:"estação chuvosa"},
+{zh:"燃烧",py:"ránshāo",pt:"combustão"},
+{zh:"卫星",py:"wèixīng",pt:"satélite"},
+{zh:"遥感",py:"yáogǎn",pt:"sensoriamento remoto"},
+{zh:"二零二零年潘塔纳尔发生了大火",py:"èr líng èr líng nián Pāntǎnàěr fāshēng le dàhuǒ",pt:"em 2020 houve grandes incêndios no Pantanal"},
+{zh:"烟雾影响人的健康",py:"yānwù yǐngxiǎng rén de jiànkāng",pt:"a fumaça afeta a saúde das pessoas"}]},
+{id:"saude",lv:2,title:"Clima e saúde humana",desc:"Calor, doenças e vulnerabilidade",items:[
+{zh:"健康",py:"jiànkāng",pt:"saúde"},
+{zh:"公共卫生",py:"gōnggòng wèishēng",pt:"saúde pública"},
+{zh:"医院",py:"yīyuàn",pt:"hospital"},
+{zh:"医生",py:"yīshēng",pt:"médico"},
+{zh:"疾病",py:"jíbìng",pt:"doença"},
+{zh:"热浪",py:"rèlàng",pt:"onda de calor"},
+{zh:"高温",py:"gāowēn",pt:"temperatura alta"},
+{zh:"温度",py:"wēndù",pt:"temperatura"},
+{zh:"湿度",py:"shīdù",pt:"umidade"},
+{zh:"死亡率",py:"sǐwánglǜ",pt:"mortalidade"},
+{zh:"呼吸系统",py:"hūxī xìtǒng",pt:"sistema respiratório"},
+{zh:"哮喘",py:"xiàochuǎn",pt:"asma"},
+{zh:"儿童",py:"értóng",pt:"crianças"},
+{zh:"老年人",py:"lǎoniánrén",pt:"idosos"},
+{zh:"脆弱性",py:"cuìruòxìng",pt:"vulnerabilidade"},
+{zh:"风险",py:"fēngxiǎn",pt:"risco"},
+{zh:"气候正义",py:"qìhòu zhèngyì",pt:"justiça climática"},
+{zh:"我研究气候变化对健康的影响",py:"wǒ yánjiū qìhòu biànhuà duì jiànkāng de yǐngxiǎng",pt:"eu pesquiso o impacto das mudanças climáticas na saúde"}]},
+{id:"pant",lv:2,title:"Pantanal, água e ecossistemas",desc:"Limnologia e transformação ecossistêmica",items:[
+{zh:"潘塔纳尔",py:"Pāntǎnàěr",pt:"Pantanal"},
+{zh:"亚马逊",py:"Yàmǎxùn",pt:"Amazônia"},
+{zh:"塞拉多",py:"Sāilādōu",pt:"Cerrado"},
+{zh:"湿地",py:"shīdì",pt:"área úmida"},
+{zh:"生态系统",py:"shēngtài xìtǒng",pt:"ecossistema"},
+{zh:"转变",py:"zhuǎnbiàn",pt:"transformação"},
+{zh:"湖泊",py:"húpō",pt:"lago"},
+{zh:"河流",py:"héliú",pt:"rio"},
+{zh:"水",py:"shuǐ",pt:"água"},
+{zh:"水质",py:"shuǐzhì",pt:"qualidade da água"},
+{zh:"洪水",py:"hóngshuǐ",pt:"inundação, cheia"},
+{zh:"浮游植物",py:"fúyóu zhíwù",pt:"fitoplâncton"},
+{zh:"藻类",py:"zǎolèi",pt:"algas"},
+{zh:"森林",py:"sēnlín",pt:"floresta"},
+{zh:"砍伐森林",py:"kǎnfá sēnlín",pt:"desmatamento"},
+{zh:"土地利用变化",py:"tǔdì lìyòng biànhuà",pt:"mudança de uso da terra"},
+{zh:"牧场",py:"mùchǎng",pt:"pastagem"},
+{zh:"生物多样性",py:"shēngwù duōyàngxìng",pt:"biodiversidade"},
+{zh:"潘塔纳尔是世界上最大的湿地",py:"Pāntǎnàěr shì shìjiè shang zuì dà de shīdì",pt:"o Pantanal é a maior área úmida do mundo"}]},
+{id:"reun",lv:2,title:"Reuniões e colaboração",desc:"Negociar cooperação, e-mail, convite",items:[
+{zh:"会议",py:"huìyì",pt:"reunião, conferência"},
+{zh:"报告",py:"bàogào",pt:"apresentação, relatório"},
+{zh:"合作协议",py:"hézuò xiéyì",pt:"acordo de cooperação"},
+{zh:"交换学生",py:"jiāohuàn xuésheng",pt:"intercâmbio de estudantes"},
+{zh:"邀请",py:"yāoqǐng",pt:"convidar, convite"},
+{zh:"签证",py:"qiānzhèng",pt:"visto"},
+{zh:"经费",py:"jīngfèi",pt:"financiamento, verba"},
+{zh:"申请",py:"shēnqǐng",pt:"solicitar, candidatar-se"},
+{zh:"电子邮件",py:"diànzǐ yóujiàn",pt:"e-mail"},
+{zh:"名片",py:"míngpiàn",pt:"cartão de visita"},
+{zh:"翻译",py:"fānyì",pt:"tradução, traduzir"},
+{zh:"我们可以合作吗？",py:"wǒmen kěyǐ hézuò ma?",pt:"podemos colaborar?"},
+{zh:"我想邀请你来巴西",py:"wǒ xiǎng yāoqǐng nǐ lái Bāxī",pt:"eu gostaria de convidá-lo ao Brasil"},
+{zh:"我们下周开会",py:"wǒmen xià zhōu kāihuì",pt:"nós teremos reunião na próxima semana"},
+{zh:"请给我发邮件",py:"qǐng gěi wǒ fā yóujiàn",pt:"por favor me envie um e-mail"},
+{zh:"我明天做报告",py:"wǒ míngtiān zuò bàogào",pt:"amanhã farei uma apresentação"}]},
+{id:"pal",lv:2,title:"Frases de palestra",desc:"Abrir, conduzir e fechar uma apresentação",items:[
+{zh:"大家好",py:"dàjiā hǎo",pt:"olá a todos"},
+{zh:"谢谢大家",py:"xièxie dàjiā",pt:"obrigado a todos"},
+{zh:"今天我想介绍我的研究",py:"jīntiān wǒ xiǎng jièshào wǒ de yánjiū",pt:"hoje quero apresentar minha pesquisa"},
+{zh:"这是我们的结果",py:"zhè shì wǒmen de jiéguǒ",pt:"estes são nossos resultados"},
+{zh:"请看这张图",py:"qǐng kàn zhè zhāng tú",pt:"por favor vejam esta figura"},
+{zh:"第一",py:"dì yī",pt:"primeiro"},
+{zh:"第二",py:"dì èr",pt:"segundo"},
+{zh:"最后",py:"zuìhòu",pt:"por último"},
+{zh:"结论",py:"jiélùn",pt:"conclusão"},
+{zh:"方法",py:"fāngfǎ",pt:"método"},
+{zh:"结果",py:"jiéguǒ",pt:"resultado"},
+{zh:"问题",py:"wèntí",pt:"pergunta, problema"},
+{zh:"有问题吗？",py:"yǒu wèntí ma?",pt:"há perguntas?"},
+{zh:"很好的问题",py:"hěn hǎo de wèntí",pt:"boa pergunta"},
+{zh:"我不太确定",py:"wǒ bú tài quèdìng",pt:"não tenho muita certeza"},
+{zh:"我用英语回答，可以吗？",py:"wǒ yòng Yīngyǔ huídá, kěyǐ ma?",pt:"posso responder em inglês?"}]}
+];
+const CHARS={
+"妈":["mā","mãe"],"麻":["má","cânhamo"],"马":["mǎ","cavalo"],"骂":["mà","xingar"],"吗":["ma","partícula de pergunta"],
+"你":["nǐ","você"],"我":["wǒ","eu"],"他":["tā","ele"],"她":["tā","ela"],"好":["hǎo","bom"],"是":["shì","ser"],"不":["bù","não"],
+"人":["rén","pessoa"],"中":["zhōng","meio, centro"],"国":["guó","país"],"巴":["bā","sílaba fonética"],"西":["xī","oeste"],
+"您":["nín","você (formal)"],"早":["zǎo","cedo, manhã"],"上":["shàng","em cima, subir"],"晚":["wǎn","tarde, noite"],"再":["zài","de novo"],
+"见":["jiàn","ver"],"谢":["xiè","agradecer"],"客":["kè","hóspede"],"气":["qì","ar, gás"],"对":["duì","correto, para com"],"起":["qǐ","levantar"],
+"没":["méi","não ter"],"关":["guān","fechar, relação"],"系":["xì","sistema, departamento"],"请":["qǐng","por favor, convidar"],"问":["wèn","perguntar"],
+"的":["de","partícula possessiva"],"明":["míng","claro, brilhante"],"白":["bái","branco"],"说":["shuō","falar"],"一":["yī","um"],"遍":["biàn","vez (repetição)"],
+"慢":["màn","devagar"],"点":["diǎn","ponto, hora"],"会":["huì","saber fazer, reunião"],"英":["yīng","Inglaterra (abrev.)"],"语":["yǔ","língua"],"文":["wén","escrita, cultura"],
+"叫":["jiào","chamar-se"],"来":["lái","vir"],"自":["zì","de, próprio"],"教":["jiào","ensinar"],"授":["shòu","conferir, ensinar"],"生":["shēng","nascer, vida"],
+"物":["wù","coisa, matéria"],"学":["xué","estudar"],"家":["jiā","casa, especialista"],"在":["zài","estar em"],"大":["dà","grande"],"工":["gōng","trabalho"],
+"作":["zuò","fazer"],"州":["zhōu","estado, província"],"立":["lì","estabelecer"],"住":["zhù","morar"],"研":["yán","pesquisar"],"究":["jiū","investigar"],
+"员":["yuán","membro"],"有":["yǒu","ter"],"博":["bó","amplo, erudito"],"士":["shì","letrado"],"位":["wèi","posição"],"荷":["hé","lótus (Holanda)"],"兰":["lán","orquídea (Holanda)"],
+"读":["dú","ler, estudar"],"很":["hěn","muito"],"高":["gāo","alto"],"兴":["xìng","alegria"],"认":["rèn","reconhecer"],"识":["shí","conhecer"],
+"什":["shén","o quê"],"么":["me","sufixo"],"名":["míng","nome"],"字":["zì","caractere"],"哪":["nǎ","qual"],"做":["zuò","fazer"],"个":["ge","classificador geral"],
+"儿":["ér","filho, criança"],"子":["zǐ","filho, sufixo"],"二":["èr","dois"],"三":["sān","três"],"四":["sì","quatro"],"五":["wǔ","cinco"],"六":["liù","seis"],
+"七":["qī","sete"],"八":["bā","oito"],"九":["jiǔ","nove"],"十":["shí","dez"],"百":["bǎi","cem"],"千":["qiān","mil"],"万":["wàn","dez mil"],
+"今":["jīn","agora, presente"],"天":["tiān","dia, céu"],"昨":["zuó","ontem"],"星":["xīng","estrela"],"期":["qī","período"],"现":["xiàn","presente, aparecer"],
+"几":["jǐ","quantos"],"半":["bàn","metade"],"午":["wǔ","meio-dia"],"下":["xià","baixo, descer"],"零":["líng","zero"],"年":["nián","ano"],"月":["yuè","mês, lua"],
+"老":["lǎo","velho"],"师":["shī","mestre"],"硕":["shuò","grande"],"后":["hòu","depois, atrás"],"实":["shí","real"],"验":["yàn","testar"],"室":["shì","sala"],
+"图":["tú","figura, mapa"],"书":["shū","livro"],"馆":["guǎn","edifício público"],"办":["bàn","tratar de"],"公":["gōng","público"],"食":["shí","comer"],
+"堂":["táng","salão"],"院":["yuàn","instituto, pátio"],"长":["zhǎng","chefe; cháng longo"],"校":["xiào","escola"],"课":["kè","aula"],"候":["hòu","tempo, esperar"],
+"变":["biàn","mudar"],"化":["huà","transformar"],"里":["lǐ","dentro"],"洗":["xǐ","lavar"],"手":["shǒu","mão"],"间":["jiān","espaço, sala"],"左":["zuǒ","esquerda"],
+"右":["yòu","direita"],"边":["biān","lado"],"前":["qián","frente"],"面":["miàn","face, lado, massa"],"直":["zhí","reto"],"走":["zǒu","andar"],"楼":["lóu","andar, prédio"],
+"电":["diàn","eletricidade"],"梯":["tī","escada"],"出":["chū","sair"],"租":["zū","alugar"],"车":["chē","veículo"],"地":["dì","terra"],"铁":["tiě","ferro"],
+"机":["jī","máquina"],"场":["chǎng","campo, lugar"],"酒":["jiǔ","álcool"],"店":["diàn","loja"],"要":["yào","querer"],"去":["qù","ir"],"多":["duō","muito"],
+"少":["shǎo","pouco"],"钱":["qián","dinheiro"],"远":["yuǎn","longe"],"帮":["bāng","ajudar"],"水":["shuǐ","água"],"茶":["chá","chá"],"咖":["kā","(café)"],"啡":["fēi","(café)"],
+"米":["mǐ","arroz"],"饭":["fàn","refeição"],"条":["tiáo","tira, fio"],"吃":["chī","comer"],"辣":["là","picante"],"这":["zhè","este"],"买":["mǎi","comprar"],
+"单":["dān","lista, único"],"饿":["è","faminto"],"累":["lèi","cansado"],"了":["le","partícula de mudança"],"网":["wǎng","rede"],"络":["luò","rede"],"密":["mì","secreto"],
+"码":["mǎ","código"],"微":["wēi","micro"],"信":["xìn","carta, confiança"],"热":["rè","calor"],"雨":["yǔ","chuva"],"科":["kē","ciência, disciplina"],"态":["tài","estado"],
+"环":["huán","anel"],"境":["jìng","ambiente"],"论":["lùn","teoria, discutir"],"发":["fā","emitir"],"表":["biǎo","expressar"],"数":["shù","número"],"据":["jù","base, dado"],
+"测":["cè","medir"],"量":["liáng","medir; liàng quantidade"],"样":["yàng","amostra, tipo"],"本":["běn","raiz, origem"],"项":["xiàng","item"],"目":["mù","olho, item"],
+"合":["hé","unir"],"司":["sī","administrar"],"咨":["zī","consultar"],"询":["xún","inquirir"],"温":["wēn","morno"],"效":["xiào","efeito"],"应":["yìng","responder"],
+"氧":["yǎng","oxigênio"],"碳":["tàn","carbono"],"甲":["jiǎ","primeiro; radical em nomes químicos"],"烷":["wán","alcano"],"亚":["yà","sub-, secundário"],"氮":["dàn","nitrogênio"],
+"排":["pái","expelir, fila"],"放":["fàng","soltar"],"通":["tōng","passar"],"循":["xún","seguir"],"汇":["huì","convergir"],"源":["yuán","fonte"],"浓":["nóng","concentrado"],
+"度":["dù","grau"],"全":["quán","todo"],"球":["qiú","globo, bola"],"暖":["nuǎn","quente"],"监":["jiān","supervisionar"],"传":["chuán","transmitir"],"感":["gǎn","sentir"],
+"器":["qì","instrumento"],"湿":["shī","úmido"],"重":["zhòng","importante, pesado"],"火":["huǒ","fogo"],"野":["yě","selvagem"],"森":["sēn","floresta"],"林":["lín","bosque"],
+"灾":["zāi","desastre"],"烧":["shāo","queimar"],"烟":["yān","fumaça"],"雾":["wù","névoa"],"空":["kōng","vazio, ar"],"质":["zhì","qualidade"],"污":["wū","sujo"],"染":["rǎn","tingir, contaminar"],
+"细":["xì","fino"],"颗":["kē","grão"],"粒":["lì","partícula"],"灰":["huī","cinza"],"干":["gān","seco"],"旱":["hàn","seca"],"季":["jì","estação do ano"],"燃":["rán","queimar"],
+"卫":["wèi","proteger"],"遥":["yáo","distante"],"康":["kāng","saúde"],"健":["jiàn","saudável"],"医":["yī","medicina"],"疾":["jí","doença"],"病":["bìng","doença"],"浪":["làng","onda"],
+"死":["sǐ","morrer"],"亡":["wáng","perecer"],"率":["lǜ","taxa"],"呼":["hū","expirar"],"吸":["xī","inspirar"],"统":["tǒng","sistema"],"童":["tóng","criança"],"脆":["cuì","frágil"],
+"弱":["ruò","fraco"],"性":["xìng","natureza, -idade"],"风":["fēng","vento"],"险":["xiǎn","perigo"],"正":["zhèng","correto"],"义":["yì","justiça"],"影":["yǐng","sombra"],"响":["xiǎng","eco, som"],
+"湖":["hú","lago"],"泊":["pō","lago"],"河":["hé","rio"],"流":["liú","fluir"],"洪":["hóng","inundação"],"浮":["fú","flutuar"],"游":["yóu","vagar, nadar"],"植":["zhí","plantar"],
+"藻":["zǎo","alga"],"类":["lèi","tipo"],"砍":["kǎn","cortar"],"伐":["fá","derrubar"],"土":["tǔ","solo"],"利":["lì","benefício"],"用":["yòng","usar"],"牧":["mù","pastorear"],
+"转":["zhuǎn","virar"],"世":["shì","mundo"],"界":["jiè","fronteira"],"最":["zuì","mais"],"议":["yì","discutir"],"报":["bào","relatar"],"告":["gào","informar"],"协":["xié","cooperar"],
+"交":["jiāo","trocar"],"换":["huàn","trocar"],"邀":["yāo","convidar"],"签":["qiān","assinar"],"证":["zhèng","comprovar"],"经":["jīng","passar por"],"费":["fèi","gasto"],"申":["shēn","declarar"],
+"邮":["yóu","correio"],"件":["jiàn","item, peça"],"片":["piàn","fatia"],"翻":["fān","virar"],"译":["yì","traduzir"],"可":["kě","poder"],"以":["yǐ","por meio de"],"想":["xiǎng","querer, pensar"],
+"周":["zhōu","semana"],"开":["kāi","abrir"],"给":["gěi","dar"],"介":["jiè","apresentar"],"绍":["shào","apresentar"],"结":["jié","concluir"],"果":["guǒ","fruto, resultado"],"看":["kàn","olhar"],
+"张":["zhāng","classificador de folhas"],"第":["dì","prefixo ordinal"],"方":["fāng","método, direção"],"法":["fǎ","lei, método"],"题":["tí","tema"],"确":["què","certo"],"定":["dìng","fixar"],
+"回":["huí","voltar"],"答":["dá","responder"],"塞":["sāi","obstruir; transliteração"],"拉":["lā","puxar; transliteração"],"潘":["pān","transliteração"],"纳":["nà","aceitar; transliteração"],
+"尔":["ěr","transliteração"],"卡":["kǎ","cartão; transliteração"],"雷":["léi","trovão; transliteração"],"斯":["sī","transliteração"],"托":["tuō","apoiar; transliteração"],"格":["gé","padrão; transliteração"],
+"罗":["luó","rede; transliteração"],"索":["suǒ","procurar; transliteração"],"无":["wú","sem"],"线":["xiàn","linha"],"哮":["xiào","ofegar"],"喘":["chuǎn","arfar"],"孙":["sūn","neto; transliteração"],"逊":["xùn","modesto; transliteração"],
+"多样":["duōyàng","diverso"],"境":["jìng","ambiente"],"绿":["lǜ","verde"],"事":["shì","assunto"]
+};
+const META={tons:["声","var(--ver)","var(--ver-soft)"],saud:["好","var(--jade)","var(--jade-soft)"],eu:["我","var(--indigo)","var(--indigo-soft)"],num:["十","var(--gold)","var(--gold-soft)"],uni:["学","var(--plum)","var(--plum-soft)"],dir:["路","var(--sky)","var(--sky-soft)"],dia:["茶","var(--jade)","var(--jade-soft)"],car:["研","var(--indigo)","var(--indigo-soft)"],gee:["碳","var(--ver)","var(--ver-soft)"],fogo:["火","var(--gold)","var(--gold-soft)"],saude:["康","var(--plum)","var(--plum-soft)"],pant:["湿","var(--sky)","var(--sky-soft)"],reun:["合","var(--jade)","var(--jade-soft)"],pal:["讲","var(--indigo)","var(--indigo-soft)"]};
+function meta(m){return META[m.id]||[m.title[0],"var(--ink)","var(--mist)"]}
+
+/* ===== estado ===== */
+const KEY="mandarim_v1";
+let S=load();
+function load(){let s=null;try{s=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+ const base={v:2,prog:{},log:{},tests:[],custom:[],xp:0,badges:[],set:{newPerDay:8,voiceRate:0.85,goal:20,tutor:"Xiǎo Tàn"}};
+ if(!s)return base;return{...base,...s,v:2,set:{...base.set,...(s.set||{})},tests:s.tests||[],xp:s.xp||0,badges:s.badges||[]}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){alert("Não foi possível gravar no aparelho.")}}
+function allModules(){return MODULES.concat(S.custom||[])}
+function allItems(){const o=[];allModules().forEach(m=>m.items.forEach((it,i)=>o.push({...it,key:m.id+"#"+i,mod:m.id,lv:m.lv,mt:m.title})));return o}
+const ITEMS=()=>allItems();
+function today(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function dayStr(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function P(k){return S.prog[k]||(S.prog[k]={reps:0,ease:2.5,int:0,due:0,ok:0,bad:0})}
+function grade(k,ok){const p=P(k);const d=today();S.log[d]=S.log[d]||{n:0,ok:0};S.log[d].n++;
+ if(ok){S.log[d].ok++;p.ok++;p.int=p.reps===0?1:p.reps===1?3:Math.round(p.int*p.ease);p.reps++;p.ease=Math.min(3,p.ease+0.08)}
+ else{p.bad++;p.reps=0;p.int=0;p.ease=Math.max(1.3,p.ease-0.2)}
+ p.due=Date.now()+p.int*864e5;save()}
+function streak(){let n=0,d=new Date();if(!S.log[today()])d.setDate(d.getDate()-1);while(S.log[dayStr(d)]){n++;d.setDate(d.getDate()-1)}return n}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;")}
+const TONE={"ā":"a","á":"a","ǎ":"a","à":"a","ē":"e","é":"e","ě":"e","è":"e","ī":"i","í":"i","ǐ":"i","ì":"i","ō":"o","ó":"o","ǒ":"o","ò":"o","ū":"u","ú":"u","ǔ":"u","ù":"u","ǖ":"v","ǘ":"v","ǚ":"v","ǜ":"v","ü":"v"};
+function flat(s){return (s||"").toLowerCase().replace(/[āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜü]/g,c=>TONE[c]).normalize("NFD").replace(/[\u0300-\u036f]/g,"")}
+
+/* ===== voz ===== */
+let voice=null;
+function pickVoice(){const vs=speechSynthesis.getVoices();voice=vs.find(v=>/zh[-_]CN/i.test(v.lang))||vs.find(v=>/^zh/i.test(v.lang))||null}
+if("speechSynthesis" in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
+function speak(t){if(!("speechSynthesis" in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="zh-CN";if(voice)u.voice=voice;u.rate=S.set.voiceRate;speechSynthesis.speak(u)}
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+function normZh(s){return (s||"").replace(/[\s，。？！,.?!、\u3000]/g,"").replace(/[A-Za-z]+/g,x=>x.toLowerCase())}
+function lcs(a,b){const n=b.length;let prev=new Array(n+1).fill(0);for(let i=1;i<=a.length;i++){const cur=[0];for(let j=1;j<=n;j++)cur[j]=a[i-1]===b[j-1]?prev[j-1]+1:Math.max(prev[j],cur[j-1]);prev=cur}return prev[n]}
+function scoreSpeech(t,h){t=normZh(t);h=normZh(h);if(!t.length)return 0;return Math.round(100*lcs(t,h)/Math.max(t.length,h.length||1))}
+function listen(onRes,onErr){if(!SR){onErr("Este navegador não reconhece voz. Use o Chrome no Android.");return}const r=new SR();r.lang="zh-CN";r.maxAlternatives=3;
+ r.onresult=e=>{const a=[];for(let i=0;i<e.results[0].length;i++)a.push(e.results[0][i].transcript);onRes(a)};r.onerror=e=>onErr("Microfone: "+e.error);r.start()}
+
+
+/* ===== avatar e gamificação ===== */
+function panda(mood,size){size=size||64;const eyes=mood==="happy"?'<path d="M22 27q4-4 8 0M34 27q4-4 8 0" stroke="#1b1b1f" stroke-width="2.4" fill="none" stroke-linecap="round"/>':mood==="sad"?'<circle cx="26" cy="28" r="2.4" fill="#1b1b1f"/><circle cx="38" cy="28" r="2.4" fill="#1b1b1f"/><path d="M21 22l6 2M43 22l-6 2" stroke="#1b1b1f" stroke-width="2" stroke-linecap="round"/>':mood==="think"?'<circle cx="26" cy="28" r="2.4" fill="#1b1b1f"/><circle cx="38" cy="28" r="2.4" fill="#1b1b1f"/><path d="M34 21h9" stroke="#1b1b1f" stroke-width="2" stroke-linecap="round"/>':'<circle cx="26" cy="28" r="2.6" fill="#1b1b1f"/><circle cx="38" cy="28" r="2.6" fill="#1b1b1f"/>';
+ const mouth=mood==="happy"?'<path d="M27 38q5 5 10 0" stroke="#1b1b1f" stroke-width="2.2" fill="none" stroke-linecap="round"/>':mood==="sad"?'<path d="M28 40q4-4 8 0" stroke="#1b1b1f" stroke-width="2.2" fill="none" stroke-linecap="round"/>':mood==="think"?'<path d="M29 39h6" stroke="#1b1b1f" stroke-width="2.2" stroke-linecap="round"/>':'<path d="M29 38q3 3 6 0" stroke="#1b1b1f" stroke-width="2.2" fill="none" stroke-linecap="round"/>';
+ return `<svg viewBox="0 0 64 64" width="${size}" height="${size}"><circle cx="17" cy="15" r="8" fill="#1b1b1f"/><circle cx="47" cy="15" r="8" fill="#1b1b1f"/><circle cx="32" cy="34" r="24" fill="#fff" stroke="#e8e9ee" stroke-width="1.5"/><ellipse cx="25" cy="28" rx="7.5" ry="8.5" fill="#1b1b1f" transform="rotate(-15 25 28)"/><ellipse cx="39" cy="28" rx="7.5" ry="8.5" fill="#1b1b1f" transform="rotate(15 39 28)"/><circle cx="26" cy="28" r="4.6" fill="#fff"/><circle cx="38" cy="28" r="4.6" fill="#fff"/>${eyes}<circle cx="26" cy="28" r="7.3" fill="none" stroke="#c73e3a" stroke-width="1.8"/><circle cx="38" cy="28" r="7.3" fill="none" stroke="#c73e3a" stroke-width="1.8"/><path d="M33.3 28h-2.6" stroke="#c73e3a" stroke-width="1.8"/><ellipse cx="32" cy="35" rx="3" ry="2.2" fill="#1b1b1f"/>${mouth}<circle cx="18" cy="38" r="3" fill="#fbe9e7"/><circle cx="46" cy="38" r="3" fill="#fbe9e7"/></svg>`}
+const SAY={start:[["我们开始吧！","Vamos começar!"],["今天也要加油！","Hoje também, força!"],["准备好了吗？","Pronto?"]],
+ ok:[["太棒了！","Excelente!"],["很好！","Muito bem!"],["完美！","Perfeito!"],["对了！","Certo!"],["你进步了！","Você progrediu!"],["就是这样！","É isso!"]],
+ bad:[["没关系，再试一次。","Sem problema, tente de novo."],["加油！","Força!"],["慢慢来。","Vá com calma."],["下次一定行。","Da próxima vai."]],
+ combo:[["连续答对！","Sequência de acertos!"],["你太厉害了！","Você está arrasando!"],["停不下来了！","Não para mais!"]],
+ end:[["今天辛苦了！","Bom trabalho hoje!"],["明天见！","Até amanhã!"],["休息一下吧。","Descanse um pouco."]]};
+function say(kind){const p=SAY[kind];return p[Math.floor(Math.random()*p.length)]}
+function tutorHTML(mood,phrase,extra){return `<div class="tutor">${panda(mood)}<div class="bubble"><b>${phrase[0]}</b><span>${phrase[1]}${extra?" "+extra:""}</span></div></div>`}
+const TITLES=[[0,"新生","Calouro"],[3,"学生","Estudante"],[6,"硕士生","Mestrando"],[9,"博士生","Doutorando"],[12,"博士后","Pós-doutorando"],[15,"教授","Professor"],[18,"院士","Acadêmico"]];
+function levelOf(xp){let lv=0,need=120,acc=0;while(xp>=acc+need){acc+=need;lv++;need=Math.round(need*1.18)}return{lv,into:xp-acc,need,pct:(xp-acc)/need}}
+function titleOf(lv){let t=TITLES[0];TITLES.forEach(x=>{if(lv>=x[0])t=x});return t}
+let combo=0;
+function addXP(n){const before=levelOf(S.xp).lv;S.xp+=n;save();const after=levelOf(S.xp).lv;if(after>before)pendingLevel=after}
+let pendingLevel=null;
+function confetti(){const c=document.createElement("div");c.className="conf";const cols=["#c73e3a","#1f8a70","#3d5afe","#e0a52d","#7b3fa0"];for(let i=0;i<26;i++){const s=document.createElement("i");s.style.left=Math.random()*100+"%";s.style.top=-10+"px";s.style.background=cols[i%5];s.style.animationDelay=Math.random()*.3+"s";c.appendChild(s)}document.body.appendChild(c);setTimeout(()=>c.remove(),1500)}
+const BADGES=[["first","🌱","Primeira sessão",()=>Object.keys(S.log).length>=1],["streak7","🔥","7 dias seguidos",()=>streak()>=7],["streak30","🏮","30 dias seguidos",()=>streak()>=30],["m50","📚","50 dominados",()=>mastered()>=50],["m150","🎓","150 dominados",()=>mastered()>=150],["test80","🏆","Teste com 80%",()=>S.tests.some(t=>t.pct>=80)],["mod","🧩","Módulo completo",()=>allModules().some(m=>m.items.every((_,i)=>(S.prog[m.id+"#"+i]||{}).reps>=3))],["xp1000","⚡","1000 XP",()=>S.xp>=1000]];
+function mastered(){return ITEMS().filter(it=>(S.prog[it.key]||{}).reps>=3).length}
+function checkBadges(){let news=[];BADGES.forEach(b=>{if(!S.badges.includes(b[0])&&b[3]()){S.badges.push(b[0]);news.push(b)}});if(news.length)save();return news}
+function levelUpScreen(lv){const t=titleOf(lv);const d=document.createElement("div");d.className="lvup";d.innerHTML=`<div><div class="avatarbig">${panda("happy",120)}</div><p class="sm" style="margin:8px 0 0">Nível ${lv}</p><div class="zh">${t[1]}</div><h2>${t[2]}</h2><p class="sm">${S.set.tutor} está orgulhoso.</p><button class="pri lg" onclick="this.closest('.lvup').remove()">Continuar</button></div>`;document.body.appendChild(d);confetti()}
+
+/* ===== navegação ===== */
+const V=document.getElementById("view");let cur="home",ctx={};
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>go(b.dataset.v));
+function go(v,c){cur=v;ctx=c||{};document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x.dataset.v===v));window.scrollTo(0,0);render()}
+function render(){({home,modules,test,dict,progress,settings,study,browse,detail,testrun}[cur])()}
+function ring(pct,color,label,size){size=size||88;const r=(size-10)/2,c=2*Math.PI*r;return `<div class="ring" style="width:${size}px;height:${size}px"><svg width="${size}" height="${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" stroke="var(--mist)" stroke-width="8" fill="none"/><circle cx="${size/2}" cy="${size/2}" r="${r}" stroke="${color}" stroke-width="8" fill="none" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c*(1-Math.min(1,pct))}"/></svg><b>${label}</b></div>`}
+
+/* ===== HOJE ===== */
+function home(){const items=ITEMS(),now=Date.now();const due=items.filter(it=>S.prog[it.key]&&S.prog[it.key].due<=now).length;const seen=Object.keys(S.prog).filter(k=>items.some(i=>i.key===k)).length;const t=S.log[today()]||{n:0,ok:0};
+ const seed=parseInt(today().replace(/-/g,""),10);const pool=items.filter(it=>it.zh.length<=4);const cod=pool[seed%pool.length];
+ const L=levelOf(S.xp),T0=titleOf(L.lv);const h=new Date().getHours();const greet=h<12?["早上好，Ernandes！","Bom dia"]:h<18?["下午好，Ernandes！","Boa tarde"]:["晚上好，Ernandes！","Boa noite"];
+ V.innerHTML=`<div class="card" style="padding:16px">${tutorHTML(t.n>=S.set.goal?"happy":"neutral",greet,t.n>=S.set.goal?"Meta batida. Quer ir além?":due?`${due} revisões esperam por você.`:"Que tal aprender algo novo?")}<div class="xpbar"><span>Nível ${L.lv} · ${T0[1]} ${T0[2]}</span><div class="bar"><i style="width:${100*L.pct}%;background:var(--gold)"></i></div><span>${L.into}/${L.need} XP</span></div></div><div class="card hero"><div class="big zh">${cod.zh}</div><div><small>Palavra do dia</small><div class="py">${cod.py}</div><div class="pt">${cod.pt}</div><button class="sec" style="margin-top:10px;padding:8px 14px;font-size:14px" onclick="speak('${esc(cod.zh)}')">Ouvir</button></div></div>
+ <div class="card"><div class="ringwrap">${ring(t.n/S.set.goal,"var(--ver)",`${t.n}<small>de ${S.set.goal}</small>`)}<div style="flex:1"><h3 style="margin:0">${t.n>=S.set.goal?"Meta de hoje cumprida":t.n?"Continue de onde parou":"Ainda não estudou hoje"}</h3><p class="sm" style="margin:2px 0 0">${due} revisões vencidas, ${items.length-seen} itens ainda novos, ${streak()} dias seguidos.</p></div></div>
+ <button class="pri full lg mt" onclick="startSession()">Sessão de hoje</button></div>
+ <div class="actions"><button class="sec" onclick="go('test')"><b>Testar conhecimento</b><small>10 ou 20 questões, todos os tipos</small></button><button class="sec" onclick="go('dict')"><b>Dicionário</b><small>${items.length} palavras e frases</small></button><button class="sec" onclick="startSession(null,'write')"><b>Treino de escrita</b><small>Montar frases e ler caracteres</small></button><button class="sec" onclick="startSession(null,'speak')"><b>Treino de fala</b><small>Microfone e nota de pronúncia</small></button></div>
+ ${!SR?'<div class="note">Reconhecimento de voz indisponível neste navegador. No Chrome do Android ele funciona.</div>':""}${("speechSynthesis" in window)&&!voice?'<div class="note">Nenhuma voz em chinês instalada. No Android: Configurações, Sistema, Idiomas, Conversão de texto em voz, instalar chinês.</div>':""}`}
+
+/* ===== SESSÃO ===== */
+let Q=[],qi=0,sess={n:0,ok:0,mode:null},bsel=[];
+const MODE_NAMES={learn:"Novo item",mc:"Reconhecer",rev:"Traduzir",listen:"Ouvir",write:"Escrita",build:"Montar frase",char:"Caractere",speak:"Falar"};
+function startSession(modId,focus){const items=ITEMS(),now=Date.now();let due=items.filter(it=>S.prog[it.key]&&S.prog[it.key].due<=now);let fresh=items.filter(it=>!S.prog[it.key]);
+ if(modId){due=due.filter(i=>i.mod===modId);fresh=fresh.filter(i=>i.mod===modId).slice(0,12)}else fresh=fresh.slice(0,S.set.newPerDay);
+ if(focus){const seen=items.filter(it=>S.prog[it.key]&&S.prog[it.key].reps>=1);Q=shuffle(seen).slice(0,15).map(it=>({it,mode:focus==="write"?pickWrite(it):"speak"}));if(!Q.length){alert("Aprenda alguns itens na sessão diária antes do treino específico.");return}}
+ else Q=shuffle(due.concat(fresh).map(it=>({it,mode:pickMode(it)})));
+ if(!Q.length){alert(modId?"Nada pendente neste módulo agora.":"Nada pendente hoje. Use Teste, Dicionário ou treine um módulo.");return}
+ qi=0;combo=0;sess={n:0,ok:0,mode:"session"};lastSay=say("start");go("study")}
+function pickWrite(it){const m=[];if(it.zh.length>=3&&it.zh.length<=9)m.push("build");if([...it.zh].some(c=>CHARS[c])&&it.zh.length>=2)m.push("char");m.push("write");return m[Math.floor(Math.random()*m.length)]}
+function pickMode(it){const p=S.prog[it.key];if(!p)return "learn";const m=["mc","rev","listen","write"];if(it.zh.length>=3&&it.zh.length<=9)m.push("build");if([...it.zh].some(c=>CHARS[c])&&it.zh.length>=2)m.push("char");if(p.reps>=2&&SR)m.push("speak");return m[Math.floor(Math.random()*m.length)]}
+function distract(it,n){const pool=ITEMS().filter(x=>x.key!==it.key);const same=shuffle(pool.filter(x=>x.mod===it.mod));const rest=shuffle(pool.filter(x=>x.mod!==it.mod));return same.concat(rest).slice(0,n)}
+function writeDistract(it,n){const pool=ITEMS().filter(x=>x.key!==it.key&&x.zh!==it.zh);const chars=new Set([...it.zh]);pool.sort((a,b)=>[...b.zh].filter(c=>chars.has(c)).length-[...a.zh].filter(c=>chars.has(c)).length);return pool.slice(0,n)}
+function study(){if(qi>=Q.length)return endSession();const {it,mode}=Q[qi];renderQuestion(it,mode,qi,Q.length,answerSession)}
+function answerSession(ok){grade(Q[qi].it.key,ok);sess.n++;if(ok)sess.ok++;qi++;render()}
+function head(mode,i,n){return `<div class="exhead"><span>${i+1} de ${n}</span><span>${MODE_NAMES[mode]}</span></div><div class="prog"><i style="width:${100*i/n}%"></i></div>`}
+let onAnswer=null,curItem=null,curMode=null,lastSay=["我们开始吧！","Vamos começar!"],lastMood="neutral",answered=false,retry=false;
+function renderQuestion(it,mode,i,n,cb,isRetry){onAnswer=cb;curItem=it;curMode=mode;bsel=[];answered=false;retry=!!isRetry;const H=head(mode,i,n)+tutorHTML(isRetry?"think":lastMood,isRetry?["再试一次。","Tente de novo, com calma."]:lastSay,combo>=3&&!isRetry?`<span class="combo">${combo} seguidos</span>`:"");
+ if(mode==="learn"){V.innerHTML=`<div class="ex">${H}<div class="qzh">${it.zh}</div><div class="qpy">${it.py}</div><div class="qpt">${it.pt}</div><button class="speak" onclick="speak('${esc(it.zh)}')">🔊</button>
+  ${breakdown(it.zh)}<p class="hint">Ouça, repita três vezes em voz alta e avalie.</p>${SR?`<button class="ghost full" onclick="tryVoice()">Testar minha pronúncia</button><div id="vres"></div>`:""}
+  <div class="pair"><button class="sec" onclick="quick(false)">Ainda difícil</button><button onclick="quick(true)">Entendi</button></div></div>`;speak(it.zh);return}
+ if(mode==="speak"){V.innerHTML=`<div class="ex">${H}<div class="qask">${it.pt}</div><p class="hint">Diga em mandarim. Toque no microfone e fale.</p><button class="mic" id="micbtn" onclick="tryVoice()">🎤</button><div id="vres" class="c"></div>
+  <button class="ghost full mt" onclick="document.getElementById('rev').classList.remove('hid')">Mostrar resposta</button><div id="rev" class="hid"><div class="qzh">${it.zh}</div><div class="qpy">${it.py}</div><div class="pair"><button class="sec" onclick="quick(false)">Errei</button><button onclick="quick(true)">Acertei</button></div></div></div>`;return}
+ if(mode==="build"){const tiles=shuffle([...it.zh].map((c,k)=>({c,k})));V.innerHTML=`<div class="ex">${H}<div class="qask">${it.pt}</div><div class="hint">${it.py}</div><p class="hint">Toque nos caracteres na ordem correta.</p><div class="slot" id="slot"></div><div class="tiles" id="tiles">${tiles.map(t=>`<button class="tile" data-k="${t.k}" onclick="pickTile(this)">${t.c}</button>`).join("")}</div><button class="ghost full" onclick="bsel=[];drawBuild()">Limpar</button></div>`;return}
+ if(mode==="char"){const cs=[...it.zh].filter(c=>CHARS[c]);const c=cs[Math.floor(Math.random()*cs.length)];const others=shuffle(Object.keys(CHARS).filter(x=>x.length===1&&x!==c&&CHARS[x][1]!==CHARS[c][1])).slice(0,3);const opts=shuffle([c].concat(others));
+  V.innerHTML=`<div class="ex">${H}<div class="qzh">${[...it.zh].map(x=>x===c?`<span class="mark">${x}</span>`:x).join("")}</div><div class="qpy">${it.py}</div><div class="qpt">${it.pt}</div><p class="hint" style="margin-top:12px">O que significa o caractere marcado, sozinho?</p>${opts.map(o=>`<button class="opt" data-k="${o===c?"ok":"no"}" onclick="pickOpt(this)">${CHARS[o][1]} <span class="p">${CHARS[o][0]}</span></button>`).join("")}</div>`;return}
+ const ds=mode==="write"?writeDistract(it,3):distract(it,3);const opts=shuffle([it].concat(ds));
+ let q="";if(mode==="mc")q=`<div class="qask">${it.pt}</div><p class="hint">Qual é a forma em mandarim?</p>`;
+ else if(mode==="rev")q=`<div class="qzh">${it.zh}</div><div class="qpy">${it.py}</div><p class="hint">O que significa?</p>`;
+ else if(mode==="listen")q=`<button class="speak" style="width:72px;height:72px;font-size:28px" onclick="speak('${esc(it.zh)}')">🔊</button><p class="hint">Ouça e escolha o significado. Toque para repetir.</p>`;
+ else q=`<div class="qpy" style="font-size:26px">${it.py}</div><div class="qpt">${it.pt}</div><p class="hint">Qual é a escrita correta? Repare nos caracteres parecidos.</p>`;
+ const showZh=mode==="mc"||mode==="write";
+ V.innerHTML=`<div class="ex">${H}${q}${opts.map(o=>`<button class="opt" data-k="${o.key===it.key?"ok":"no"}" onclick="pickOpt(this)">${showZh?`<span class="hz">${o.zh}</span>${mode==="mc"?`<span class="p">${o.py}</span>`:""}`:o.pt}</button>`).join("")}</div>`;
+ if(mode==="listen")speak(it.zh)}
+function breakdown(zh){const cs=[...zh].filter(c=>CHARS[c]);if(zh.length<2||!cs.length)return "";return `<div class="charrow">${[...zh].map(c=>CHARS[c]?`<div><span class="hz">${c}</span><small>${CHARS[c][0]}</small><span>${CHARS[c][1]}</span></div>`:"").join("")}</div>`}
+function pickOpt(btn){if(answered)return;answered=true;const ok=btn.dataset.k==="ok";document.querySelectorAll(".opt").forEach(b=>{b.disabled=true;if(b.dataset.k==="ok")b.classList.add("ok");else if(b===btn)b.classList.add("bad")});if(curMode!=="char")speak(curItem.zh);feedback(ok)}
+function pickTile(b){if(answered||b.classList.contains("used"))return;bsel.push(+b.dataset.k);drawBuild();if(bsel.length===curItem.zh.length){answered=true;const built=bsel.map(k=>curItem.zh[k]).join("");const ok=built===curItem.zh;const s=document.getElementById("slot");s.style.borderColor=ok?"var(--jade)":"var(--ver)";s.style.borderStyle="solid";speak(curItem.zh);feedback(ok)}}
+function feedback(ok){const it=curItem;const first=!retry;if(first){if(ok){combo++;addXP(10+Math.min(combo,5)*2);if(combo===3||combo===5||combo===10)confetti()}else combo=0}
+ lastMood=ok?"happy":"sad";lastSay=ok?(combo>=3&&first?say("combo"):say("ok")):say("bad");
+ const fb=document.createElement("div");fb.className="fb "+(ok?"ok":"bad");
+ fb.innerHTML=`<h4>${ok?(retry?"Agora sim.":"Correto!"):"Ainda não."}${first&&ok?` <span class="combo">+${10+Math.min(combo,5)*2} XP</span>`:""}</h4><div class="ans">${it.zh}</div><div style="color:var(--ver);font-weight:700">${it.py}</div><div class="sm">${it.pt}</div>${breakdown(it.zh)}<div class="pair"><button class="ghost" onclick="speak('${esc(it.zh)}')">Ouvir de novo</button>${ok?"":`<button class="sec" onclick="redo()">Tentar de novo</button>`}<button class="${ok?"pri":""}" onclick="finishQ(${ok})">Continuar</button></div>`;
+ document.querySelector(".ex").appendChild(fb);fb.scrollIntoView({behavior:"smooth",block:"end"})}
+let firstResult=null;
+function redo(){if(firstResult===null)firstResult=false;renderQuestion(curItem,curMode,curIdx(),curTotal(),onAnswer,true)}
+function curIdx(){return sess.mode==="session"?qi:ti}function curTotal(){return sess.mode==="session"?Q.length:T.length}
+function finishQ(ok){const res=firstResult===null?ok:firstResult;firstResult=null;onAnswer(res)}
+function drawBuild(){const s=document.getElementById("slot");s.innerHTML=bsel.map(k=>`<span class="tile">${curItem.zh[k]}</span>`).join("");document.querySelectorAll("#tiles .tile").forEach(t=>t.classList.toggle("used",bsel.includes(+t.dataset.k)))}
+function tryVoice(){const it=curItem,box=document.getElementById("vres"),mb=document.getElementById("micbtn");if(mb)mb.classList.add("rec");box.innerHTML='<p class="sm c">Ouvindo…</p>';
+ listen(alts=>{if(mb)mb.classList.remove("rec");const best=alts.map(a=>({a,s:scoreSpeech(it.zh,a)})).sort((x,y)=>y.s-x.s)[0];const col=best.s>=80?"var(--jade)":best.s>=50?"var(--gold)":"var(--ver)";
+  box.innerHTML=`<div class="score" style="color:${col}">${best.s}%</div><p class="sm c">Ouvido: ${esc(best.a)}<br>Alvo: ${it.zh}</p><p class="sm c">Compara os caracteres reconhecidos com o alvo; não mede tons com precisão.</p>`;
+  if(curMode==="speak"){document.getElementById("rev").classList.remove("hid")}},
+ err=>{if(mb)mb.classList.remove("rec");box.innerHTML=`<div class="err">${err}</div>`})}
+function quick(ok){if(ok){combo++;addXP(8)}else combo=0;lastMood=ok?"happy":"sad";lastSay=ok?say("ok"):say("bad");onAnswer(ok)}
+function endSession(){const acc=sess.n?Math.round(100*sess.ok/sess.n):0;const nb=checkBadges();if(pendingLevel){levelUpScreen(pendingLevel);pendingLevel=null}V.innerHTML=`<div class="card">${tutorHTML("happy",say("end"),acc>=80?"Sessão limpa.":"Amanhã os erros voltam para revisão.")}${nb.length?`<div class="note">Nova conquista: ${nb.map(b=>b[1]+" "+b[2]).join(", ")}</div>`:""}</div><div class="card c"><h2>Sessão concluída</h2><div class="res"><div><b>${sess.n}</b><span>itens</span></div><div><b>${acc}%</b><span>acerto</span></div><div><b>${streak()}</b><span>dias seguidos</span></div><div><b>${(S.log[today()]||{}).n||0}</b><span>feitos hoje</span></div></div><button class="pri full lg mt" onclick="go('home')">Voltar</button></div>`}
+
+/* ===== MÓDULOS ===== */
+let lvFilter=0;
+function modules(){const ms=allModules().filter(m=>!lvFilter||m.lv===lvFilter);
+ V.innerHTML=`<h2>Módulos</h2><div class="chips">${[[0,"Todos"],[1,"Básico"],[2,"Intermediário"]].map(([v,t])=>`<button class="chip ${lvFilter===v?"on":""}" onclick="lvFilter=${v};render()">${t}</button>`).join("")}</div>`+ms.map(m=>{const n=m.items.length;let seen=0,mast=0;m.items.forEach((_,i)=>{const p=S.prog[m.id+"#"+i];if(p){seen++;if(p.reps>=3)mast++}});const [ic,col,soft]=meta(m);
+ return `<div class="modcard"><div class="ico" style="background:${soft};color:${col}">${ic}</div><div class="t"><b>${m.title}<span class="lvl ${m.lv===1?"b":"i"}">${m.lv===1?"básico":"interm."}</span></b><span>${m.desc||""}</span><div class="bar"><i style="width:${100*seen/n}%;background:${col}"></i></div><span>${mast} de ${n} dominados</span></div><div class="btns"><button class="sec" onclick="go('browse',{id:'${m.id}'})">Ver</button><button onclick="startSession('${m.id}')">Treinar</button></div></div>`}).join("")}
+function browse(){const m=allModules().find(x=>x.id===ctx.id);const [ic,col,soft]=meta(m);V.innerHTML=`<button class="sec" onclick="go('modules')">← Módulos</button><div class="card" style="margin-top:12px"><div style="display:flex;gap:12px;align-items:center"><div class="ico" style="width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-size:26px;background:${soft};color:${col}" class="hz">${ic}</div><div><h2 style="margin:0">${m.title}</h2><p class="sm" style="margin:0">${m.desc||""}</p></div></div><button class="pri full mt" onclick="startSession('${m.id}')">Treinar este módulo</button></div><div class="card">${m.items.map((it,i)=>rowHTML({...it,key:m.id+"#"+i})).join("")}</div>`}
+function rowHTML(it){const p=S.prog[it.key];return `<div class="row" onclick="go('detail',{key:'${it.key}'})"><div class="hz">${it.zh}</div><div class="info"><em>${it.py}</em><span>${it.pt}</span>${p?`<span>${p.reps>=3?"dominado":"em estudo"}, ${p.ok} acertos, ${p.bad} erros</span>`:""}</div><button class="sec" onclick="event.stopPropagation();speak('${esc(it.zh)}')">🔊</button></div>`}
+
+/* ===== DICIONÁRIO ===== */
+let dq="",dlv=0;
+function dict(){const items=ITEMS();const f=flat(dq.trim());const res=items.filter(it=>(!dlv||it.lv===dlv)&&(!f||it.zh.includes(dq.trim())||flat(it.py).replace(/\s/g,"").includes(f.replace(/\s/g,""))||flat(it.pt).includes(f)));
+ const chars=f&&dq.trim().length===1&&CHARS[dq.trim()]?[dq.trim()]:(f&&f.length>=2?Object.keys(CHARS).filter(c=>c.length===1&&(flat(CHARS[c][0])===f||flat(CHARS[c][1]).includes(f))).slice(0,6):[]);
+ V.innerHTML=`<h2>Dicionário</h2><div class="search"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg><input id="dq" placeholder="Busque em chinês, pinyin (sem tom) ou português" value="${esc(dq)}" oninput="dq=this.value;dictList()"></div><div class="chips">${[[0,"Tudo"],[1,"Básico"],[2,"Intermediário"]].map(([v,t])=>`<button class="chip ${dlv===v?"on":""}" onclick="dlv=${v};dictList()">${t}</button>`).join("")}</div><div id="dl"></div>`;dictList();document.getElementById("dq").focus()}
+function dictList(){const items=ITEMS();const q=dq.trim(),f=flat(q);const res=items.filter(it=>(!dlv||it.lv===dlv)&&(!f||it.zh.includes(q)||flat(it.py).replace(/\s/g,"").includes(f.replace(/\s/g,""))||flat(it.pt).includes(f)));
+ const chars=f?Object.keys(CHARS).filter(c=>c.length===1&&(c===q||flat(CHARS[c][0])===f||(f.length>=3&&flat(CHARS[c][1]).includes(f)))).slice(0,8):[];
+ document.getElementById("dl").innerHTML=(chars.length?`<div class="card"><h3>Caracteres</h3><div class="charrow">${chars.map(c=>`<div><span class="hz">${c}</span><small>${CHARS[c][0]}</small><span>${CHARS[c][1]}</span></div>`).join("")}</div></div>`:"")+`<div class="card">${res.length?res.slice(0,80).map(rowHTML).join("")+(res.length>80?`<p class="sm c">Mostrando 80 de ${res.length}. Refine a busca.</p>`:""):'<p class="sm c">Nada encontrado. Tente o pinyin sem acento, por exemplo "qihou".</p>'}</div>`}
+function detail(){const it=ITEMS().find(x=>x.key===ctx.key);const p=S.prog[it.key];V.innerHTML=`<button class="sec" onclick="history.back?go(ctx.from||'dict'):go('dict')">← Voltar</button><div class="card detail" style="margin-top:12px"><div class="zh">${it.zh}</div><div class="qpy">${it.py}</div><div class="qpt">${it.pt}</div><button class="speak" onclick="speak('${esc(it.zh)}')">🔊</button>${breakdown(it.zh)}<div class="k"><span>Módulo</span><b>${it.mt}</b></div><div class="k"><span>Situação</span><b>${p?(p.reps>=3?"Dominado":"Em estudo"):"Ainda não visto"}</b></div>${p?`<div class="k"><span>Acertos e erros</span><b>${p.ok} / ${p.bad}</b></div><div class="k"><span>Próxima revisão</span><b>${p.due<=Date.now()?"agora":new Date(p.due).toLocaleDateString("pt-BR")}</b></div>`:""}<div class="pair"><button class="sec" onclick="Q=[{it:ITEMS().find(x=>x.key==='${it.key}'),mode:'${p?"write":"learn"}'},{it:ITEMS().find(x=>x.key==='${it.key}'),mode:'${SR?"speak":"mc"}'}];qi=0;sess={n:0,ok:0};go('study')">Praticar agora</button>${SR?`<button onclick="Q=[{it:ITEMS().find(x=>x.key==='${it.key}'),mode:'speak'}];qi=0;sess={n:0,ok:0};go('study')">Falar</button>`:""}</div></div>`}
+
+/* ===== TESTE ===== */
+let tcfg={scope:"all",n:10};
+function test(){const ms=allModules();const last=S.tests.slice(-5).reverse();
+ V.innerHTML=`<h2>Testar conhecimento</h2><div class="card"><p class="sm">Questões misturadas sem dica de progresso: reconhecer, traduzir, ouvir, escrita, montar frase e caractere. O resultado fica registrado, mas não altera a agenda de revisão.</p>
+ <label>Abrangência</label><select id="ts" onchange="tcfg.scope=this.value"><option value="all">Todo o curso</option><option value="lv1">Só básico</option><option value="lv2">Só intermediário</option>${ms.map(m=>`<option value="${m.id}">${m.title}</option>`).join("")}</select>
+ <label>Número de questões</label><div class="chips">${[10,20,30].map(n=>`<button class="chip ${tcfg.n===n?"on":""}" onclick="tcfg.n=${n};render()">${n}</button>`).join("")}</div>
+ <button class="pri full lg" onclick="tcfg.scope=document.getElementById('ts').value;startTest()">Começar o teste</button></div>
+ <div class="card"><h3>Últimos testes</h3>${last.length?last.map(t=>`<div class="k"><span>${t.date} · ${t.scopeName}</span><b style="color:${t.pct>=80?"var(--jade)":t.pct>=60?"var(--gold)":"var(--ver)"}">${t.pct}%</b></div>`).join(""):'<p class="sm">Nenhum teste feito ainda.</p>'}</div>`;document.getElementById("ts").value=tcfg.scope}
+let T=[],ti=0,tres={ok:0,by:{}};
+function startTest(){let items=ITEMS();if(tcfg.scope==="lv1")items=items.filter(i=>i.lv===1);else if(tcfg.scope==="lv2")items=items.filter(i=>i.lv===2);else if(tcfg.scope!=="all")items=items.filter(i=>i.mod===tcfg.scope);
+ items=shuffle(items).slice(0,tcfg.n);const modes=["mc","rev","listen","write"];T=items.map((it,k)=>{let m=modes[k%modes.length];if(k%5===4&&it.zh.length>=3&&it.zh.length<=9)m="build";if(k%7===6&&[...it.zh].some(c=>CHARS[c])&&it.zh.length>=2)m="char";return{it,mode:m}});shuffle(T);ti=0;combo=0;sess={n:0,ok:0,mode:"test"};lastSay=say("start");lastMood="neutral";go("testrun")}
+function testrun(){if(ti>=T.length)return endTest();const {it,mode}=T[ti];renderQuestion(it,mode,ti,T.length,ok=>{const b=tres.by[mode]=tres.by[mode]||{n:0,ok:0};b.n++;if(ok){b.ok++;tres.ok++}ti++;render()})}
+function endTest(){const pct=Math.round(100*tres.ok/T.length);addXP(Math.round(pct/2));const nb=checkBadges();if(pendingLevel){levelUpScreen(pendingLevel);pendingLevel=null}const names={all:"Todo o curso",lv1:"Básico",lv2:"Intermediário"};const scopeName=names[tcfg.scope]||(allModules().find(m=>m.id===tcfg.scope)||{}).title;S.tests.push({date:today(),scope:tcfg.scope,scopeName,n:T.length,ok:tres.ok,pct,by:tres.by});save();
+ const col=pct>=80?"var(--jade)":pct>=60?"var(--gold)":"var(--ver)";
+ V.innerHTML=`<div class="card">${tutorHTML(pct>=80?"happy":pct>=60?"neutral":"sad",pct>=80?["非常好！","Muito bom!"]:pct>=60?["还可以。","Razoável."]:["继续努力！","Continue se esforçando!"],`+${Math.round(pct/2)} XP`)}${nb.length?`<div class="note">Nova conquista: ${nb.map(b=>b[1]+" "+b[2]).join(", ")}</div>`:""}</div><div class="card c"><h2>Resultado</h2>${ring(pct/100,col,`${pct}%`,120)}<p class="sm">${tres.ok} de ${T.length} questões, ${scopeName}.</p></div><div class="card"><h3>Por tipo de questão</h3>${Object.entries(tres.by).map(([m,b])=>`<div class="k"><span>${MODE_NAMES[m]}</span><b>${b.ok} / ${b.n}</b></div>`).join("")}</div><div class="pair"><button class="sec" onclick="go('test')">Novo teste</button><button class="pri" onclick="go('home')">Início</button></div>`}
+
+/* ===== PROGRESSO ===== */
+let charts=[];
+function progress(){const days=[];for(let i=13;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);days.push(dayStr(d))}
+ const n=days.map(d=>(S.log[d]||{}).n||0),acc=days.map(d=>{const l=S.log[d];return l&&l.n?Math.round(100*l.ok/l.n):null});
+ const items=ITEMS();let mast=0,seen=0;items.forEach(it=>{const p=S.prog[it.key];if(p){seen++;if(p.reps>=3)mast++}});
+ const hard=items.filter(it=>S.prog[it.key]&&S.prog[it.key].bad>=2).sort((a,b)=>S.prog[b.key].bad-S.prog[a.key].bad).slice(0,8);const tests=S.tests.slice(-12);
+ const L=levelOf(S.xp),T0=titleOf(L.lv);
+ V.innerHTML=`<h2>Progresso</h2><div class="card"><div class="ringwrap">${panda("happy",72)}<div style="flex:1"><h3 style="margin:0">Nível ${L.lv} · ${T0[1]} ${T0[2]}</h3><div class="xpbar" style="margin-top:6px"><div class="bar"><i style="width:${100*L.pct}%;background:var(--gold)"></i></div><span>${L.into}/${L.need}</span></div><p class="sm" style="margin:4px 0 0">${S.xp} XP no total. Próximo título: ${(TITLES.find(t=>t[0]>L.lv)||TITLES[TITLES.length-1])[2]}.</p></div></div></div>
+ <div class="card"><h3>Conquistas</h3><div class="badges">${BADGES.map(b=>`<div class="badge ${S.badges.includes(b[0])?"on":""}"><div class="b">${b[1]}</div>${b[2]}</div>`).join("")}</div></div><div class="card"><div class="ringwrap">${ring(mast/items.length,"var(--jade)",`${Math.round(100*mast/items.length)}%<small>dominado</small>`,96)}<div class="stat" style="flex:1"><div><b>${mast}</b><span>dominados</span></div><div><b>${seen-mast}</b><span>em estudo</span></div><div><b>${items.length-seen}</b><span>novos</span></div></div></div></div>
+ <div class="card"><h3>Itens estudados por dia</h3><canvas id="c1"></canvas></div><div class="card"><h3>Acerto diário (%)</h3><canvas id="c2"></canvas></div>
+ <div class="card"><h3>Notas dos testes (%)</h3>${tests.length?'<canvas id="c3"></canvas>':'<p class="sm">Faça um teste para ver a evolução.</p>'}</div>
+ <div class="card"><h3>Domínio por módulo</h3>${allModules().map(m=>{let k=0;m.items.forEach((_,i)=>{const p=S.prog[m.id+"#"+i];if(p&&p.reps>=3)k++});const [ic,col]=meta(m);return `<div style="margin:8px 0"><div style="display:flex;justify-content:space-between;font-size:14px"><span>${m.title}</span><span class="sm">${k}/${m.items.length}</span></div><div class="bar"><i style="width:${100*k/m.items.length}%;background:${col}"></i></div></div>`}).join("")}</div>
+ <div class="card"><h3>Itens que mais erra</h3>${hard.length?hard.map(rowHTML).join(""):'<p class="sm">Nenhum ainda.</p>'}</div>`;
+ charts.forEach(c=>c.destroy());charts=[];const lbl=days.map(d=>d.slice(8)+"/"+d.slice(5,7));
+ if(!window.Chart){V.insertAdjacentHTML("beforeend",'<div class="err">Os gráficos não carregaram. Verifique a conexão.</div>');return}
+ const ax={ticks:{font:{family:"Manrope",size:12}},grid:{color:"#eef0f4"}};
+ charts.push(new Chart(document.getElementById("c1"),{type:"bar",data:{labels:lbl,datasets:[{data:n,backgroundColor:"#c73e3a",borderRadius:6}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,...ax},x:ax}}}));
+ charts.push(new Chart(document.getElementById("c2"),{type:"line",data:{labels:lbl,datasets:[{data:acc,borderColor:"#1f8a70",backgroundColor:"#1f8a70",spanGaps:true,tension:.3,pointRadius:4}]},options:{plugins:{legend:{display:false}},scales:{y:{min:0,max:100,...ax},x:ax}}}));
+ if(tests.length)charts.push(new Chart(document.getElementById("c3"),{type:"line",data:{labels:tests.map(t=>t.date.slice(8)+"/"+t.date.slice(5,7)),datasets:[{data:tests.map(t=>t.pct),borderColor:"#3d5afe",backgroundColor:"#3d5afe",tension:.3,pointRadius:4}]},options:{plugins:{legend:{display:false}},scales:{y:{min:0,max:100,...ax},x:ax}}}))}
+
+/* ===== AJUSTES ===== */
+function settings(){V.innerHTML=`<h2>Ajustes</h2><div class="card">${tutorHTML("neutral",["我是"+S.set.tutor+"。","Sou seu tutor. Um panda pesquisador de carbono, como você."])}</div><div class="card"><h3>Sessão diária</h3><label>Itens novos por sessão</label><select id="npd">${[4,6,8,10,15,20].map(v=>`<option ${v===S.set.newPerDay?"selected":""}>${v}</option>`).join("")}</select><label>Meta diária (itens)</label><select id="goal">${[10,20,30,50].map(v=>`<option ${v===S.set.goal?"selected":""}>${v}</option>`).join("")}</select><label>Nome do seu tutor</label><input class="f" id="tn" value="${esc(S.set.tutor)}"><label>Velocidade da voz</label><select id="vr">${[[0.6,"Muito lenta"],[0.75,"Lenta"],[0.85,"Normal lenta"],[1,"Normal"]].map(([v,t])=>`<option value="${v}" ${v===S.set.voiceRate?"selected":""}>${t}</option>`).join("")}</select><button class="full mt" onclick="S.set.newPerDay=+npd.value;S.set.goal=+goal.value;S.set.tutor=tn.value.trim()||"Xiǎo Tàn";S.set.voiceRate=+vr.value;save();go('home')">Salvar</button></div>
+ <div class="card"><h3>Backup</h3><p class="sm">Exporte o JSON para trocar de aparelho. No iPhone, o Safari pode apagar dados de sites sem uso por alguns dias; exporte com frequência.</p><button class="ghost full" onclick="exportJSON()">Exportar progresso (JSON)</button><label>Importar progresso</label><input class="f" type="file" accept=".json" onchange="importJSON(this,'prog')"></div>
+ <div class="card"><h3>Módulos extras</h3><p class="sm">Formato: {"modules":[{"id":"x","lv":2,"title":"…","desc":"…","items":[{"zh":"…","py":"…","pt":"…"}]}]}. Id repetido substitui o módulo.</p><input class="f" type="file" accept=".json" onchange="importJSON(this,'mods')"><p class="sm">Extras instalados: ${(S.custom||[]).length}</p></div>
+ <div class="card"><h3>Aparelho</h3><div class="k"><span>Reconhecimento de voz</span><b>${SR?"disponível":"indisponível"}</b></div><div class="k"><span>Voz em chinês</span><b>${voice?voice.name:"não encontrada"}</b></div><button class="ghost full mt" onclick="speak('你好，我叫 Ernandes，我是巴西人')">Testar voz</button></div>
+ <div class="card"><button class="ghost full" style="color:var(--ver)" onclick="if(confirm('Apagar todo o progresso deste aparelho?')){localStorage.removeItem(KEY);S=load();go('home')}">Apagar progresso</button></div>`}
+function exportJSON(){const b=new Blob([JSON.stringify(S,null,1)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="mandarim-progresso-"+today()+".json";a.click()}
+function importJSON(inp,kind){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);
+ if(kind==="prog"){if(!d.prog||!d.log)throw 0;S={...S,...d,v:2,tests:d.tests||[],custom:d.custom||S.custom};save();alert("Progresso importado.")}
+ else{if(!Array.isArray(d.modules))throw 0;d.modules.forEach(m=>{if(!m.id||!Array.isArray(m.items))throw 0;S.custom=(S.custom||[]).filter(x=>x.id!==m.id);S.custom.push(m)});save();alert(d.modules.length+" módulo(s) importado(s).")}go("home")}catch(e){alert("Arquivo inválido.")}};r.readAsText(f)}
+render();
+</script></body></html>
