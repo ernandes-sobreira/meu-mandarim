@@ -207,12 +207,15 @@ textarea.f{font:inherit;padding:11px 12px;border:1.5px solid var(--line);border-
 .cheer b{font-family:"Noto Serif SC",serif;font-size:20px;display:block}
 .cheer span{font-size:13px;color:var(--muted)}
 .tap{cursor:pointer;-webkit-tap-highlight-color:rgba(199,62,58,.15)}.tap:active{opacity:.6}
+.bubble,.cheer{user-select:none;-webkit-user-select:none}
+.sheet{position:fixed;inset:0;background:rgba(27,27,31,.35);z-index:30;display:flex;align-items:flex-end}
+.sheetin{background:#fff;width:100%;max-width:640px;margin:0 auto;border-radius:22px 22px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom,0px));animation:pop .2s ease-out}
 </style>
 </head>
 <body>
 <div class="wrap">
 <header>
-<div class="brand"><div class="seal">学</div><div><b>Mandarim Acadêmico</b><span id="sub">Universidade, clima e saúde · v11</span></div></div>
+<div class="brand"><div class="seal">学</div><div><b>Mandarim Acadêmico</b><span id="sub">Universidade, clima e saúde · v12</span></div></div>
 <button class="gear" onclick="go('settings')" aria-label="Ajustes"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
 </header>
 <div id="view"></div>
@@ -476,7 +479,7 @@ const MODULES = [
 {zh:"我不太确定",py:"wǒ bú tài quèdìng",pt:"não tenho muita certeza"},
 {zh:"我用英语回答，可以吗？",py:"wǒ yòng Yīngyǔ huídá, kěyǐ ma?",pt:"posso responder em inglês?"}]}
 ];
-const CHARS={
+const CHARS={"吧":["ba","partícula de sugestão"],"准":["zhǔn","preciso, permitir"],"备":["bèi","preparar"],"棒":["bàng","ótimo, bastão"],"美":["měi","belo"],"进":["jìn","avançar"],"步":["bù","passo"],"就":["jiù","justamente, então"],"厉":["lì","severo"],"害":["hài","dano; lìhai = impressionante"],"音":["yīn","som"],"越":["yuè","ultrapassar; cada vez mais"],"试":["shì","tentar"],"次":["cì","vez"],"难":["nán","difícil"],"别":["bié","não (imperativo)"],"心":["xīn","coração, ânimo"],"连":["lián","ligar, seguido"],"续":["xù","continuar"],"停":["tíng","parar"],"辛":["xīn","árduo"],"苦":["kǔ","amargo, sofrido"],"休":["xiū","descansar"],"息":["xi","descansar, respirar"],"们":["men","sufixo de plural"],"始":["shǐ","começar"],"也":["yě","também"],"加":["jiā","adicionar"],"油":["yóu","óleo; jiāyóu = força"],"行":["xíng","funcionar, ok"],"太":["tài","demais, muito"],"非":["fēi","não"],"常":["cháng","frequente"],"还":["hái","ainda"],"继":["jì","continuar"],"努":["nǔ","esforçar-se"],"力":["lì","força"],
 "妈":["mā","mãe"],"麻":["má","cânhamo"],"马":["mǎ","cavalo"],"骂":["mà","xingar"],"吗":["ma","partícula de pergunta"],
 "你":["nǐ","você"],"我":["wǒ","eu"],"他":["tā","ele"],"她":["tā","ela"],"好":["hǎo","bom"],"是":["shì","ser"],"不":["bù","não"],
 "人":["rén","pessoa"],"中":["zhōng","meio, centro"],"国":["guó","país"],"巴":["bā","sílaba fonética"],"西":["xī","oeste"],
@@ -533,7 +536,7 @@ const CHARS={
 const META={tons:["声","var(--ver)","var(--ver-soft)"],saud:["好","var(--jade)","var(--jade-soft)"],eu:["我","var(--indigo)","var(--indigo-soft)"],num:["十","var(--gold)","var(--gold-soft)"],uni:["学","var(--plum)","var(--plum-soft)"],dir:["路","var(--sky)","var(--sky-soft)"],dia:["茶","var(--jade)","var(--jade-soft)"],car:["研","var(--indigo)","var(--indigo-soft)"],gee:["碳","var(--ver)","var(--ver-soft)"],fogo:["火","var(--gold)","var(--gold-soft)"],saude:["康","var(--plum)","var(--plum-soft)"],pant:["湿","var(--sky)","var(--sky-soft)"],reun:["合","var(--jade)","var(--jade-soft)"],pal:["讲","var(--indigo)","var(--indigo-soft)"]};
 function meta(m){return META[m.id]||[m.title[0],"var(--ink)","var(--mist)"]}
 
-const APP_VERSION="v11";
+const APP_VERSION="v12";
 /* ===== estado ===== */
 const KEY="mandarim_v1";
 let S=load();
@@ -590,13 +593,18 @@ function tutorSVG(mood,size,speaking){size=size||64;const brow=mood==="sad"?'<pa
 function panda(mood,size){return `<img src="${bust(mood)}" style="width:${size||64}px;height:${size||64}px;border-radius:50%;object-fit:cover" alt="">`}
 
 /* ===== avatar e gamificação ===== */
-const SAY={start:[["我们开始吧！","Vamos começar!"],["今天也要加油！","Hoje também, força!"],["准备好了吗？","Pronto?"]],
- ok:[["太棒了！","Excelente, Ernandes!"],["很好！","Muito bem!"],["完美！","Perfeito!"],["对了！","Certo!"],["你进步了！","Você está progredindo!"],["就是这样！","É isso mesmo!"],["厉害！","Impressionante!"],["你的发音越来越好了！","Sua pronúncia está cada vez melhor!"]],
- bad:[["没关系，再试一次。","Sem problema, olhe a resposta e tente de novo."],["加油！","Força! Errar faz parte."],["慢慢来，你可以的。","Vá com calma, você consegue."],["下次一定行。","Da próxima vai."],["这个很难，别灰心。","Este é difícil mesmo, não desanime."],["我们一起看看。","Vamos olhar juntos."]],
- combo:[["连续答对！","Sequência de acertos!"],["你太厉害了！","Você está arrasando!"],["停不下来了！","Não para mais!"]],
- end:[["今天辛苦了！","Bom trabalho hoje!"],["明天见！","Até amanhã!"],["休息一下吧。","Descanse um pouco."]]};
+const SAY={start:[["我们开始吧！","Vamos começar!","wǒmen kāishǐ ba"],["今天也要加油！","Hoje também, força!","jīntiān yě yào jiāyóu"],["准备好了吗？","Pronto?","zhǔnbèi hǎo le ma"]],
+ ok:[["太棒了！","Excelente, Ernandes!","tài bàng le"],["很好！","Muito bem!","hěn hǎo"],["完美！","Perfeito!","wánměi"],["对了！","Certo!","duì le"],["你进步了！","Você está progredindo!","nǐ jìnbù le"],["就是这样！","É isso mesmo!","jiù shì zhèyàng"],["厉害！","Impressionante!","lìhai"],["你的发音越来越好了！","Sua pronúncia está cada vez melhor!","nǐ de fāyīn yuè lái yuè hǎo le"]],
+ bad:[["没关系，再试一次。","Sem problema, olhe a resposta e tente de novo.","méi guānxi, zài shì yí cì"],["加油！","Força! Errar faz parte.","jiāyóu"],["慢慢来，你可以的。","Vá com calma, você consegue.","màn màn lái, nǐ kěyǐ de"],["下次一定行。","Da próxima vai.","xià cì yídìng xíng"],["这个很难，别灰心。","Este é difícil mesmo, não desanime.","zhège hěn nán, bié huīxīn"],["我们一起看看。","Vamos olhar juntos.","wǒmen yìqǐ kànkan"]],
+ combo:[["连续答对！","Sequência de acertos!","liánxù dá duì"],["你太厉害了！","Você está arrasando!","nǐ tài lìhai le"],["停不下来了！","Não para mais!","tíng bu xiàlái le"]],
+ end:[["今天辛苦了！","Bom trabalho hoje!","jīntiān xīnkǔ le"],["明天见！","Até amanhã!","míngtiān jiàn"],["休息一下吧。","Descanse um pouco.","xiūxi yíxià ba"]]};
+const PHR={};Object.values(SAY).flat().forEach(p=>PHR[p[0]]=p);PHR["再试一次。"]=["再试一次。","Tente de novo, com calma.","zài shì yí cì"];PHR["早上好，Ernandes！"]=["早上好，Ernandes！","Bom dia, Ernandes!","zǎoshang hǎo"];PHR["下午好，Ernandes！"]=["下午好，Ernandes！","Boa tarde, Ernandes!","xiàwǔ hǎo"];PHR["晚上好，Ernandes！"]=["晚上好，Ernandes！","Boa noite, Ernandes!","wǎnshang hǎo"];PHR["非常好！"]=["非常好！","Muito bom!","fēicháng hǎo"];PHR["还可以。"]=["还可以。","Razoável.","hái kěyǐ"];PHR["继续努力！"]=["继续努力！","Continue se esforçando!","jìxù nǔlì"];
+function phraseCard(zh){const p=PHR[zh]||[zh,"",""];const old=document.getElementById("pcard");if(old)old.remove();const d=document.createElement("div");d.id="pcard";d.className="sheet";
+ d.innerHTML=`<div class="sheetin"><div class="sm c">O que a professora disse</div><div class="qzh tap" onclick="speak('${esc(p[0])}')">${esc(p[0])}</div><div class="qpy">${esc(p[2])}</div><div class="qpt">${esc(p[1])}</div>${breakdown(p[0].replace(/[，。！？Ernandes ]/g,""))}<div class="pair"><button class="sec" onclick="speak('${esc(p[0])}')">🔊 Ouvir</button><button class="sec" onclick="const r=S.set.voiceRate;S.set.voiceRate=0.55;speak('${esc(p[0])}');S.set.voiceRate=r">🐢 Devagar</button><button onclick="addPhrase('${esc(p[0])}')">+ Praticar</button></div><button class="ghost full mt" onclick="document.getElementById('pcard').remove()">Fechar</button></div>`;
+ document.body.appendChild(d);speak(p[0])}
+function addPhrase(zh){const p=PHR[zh];if(!p)return;let mod=(S.custom||[]).find(x=>x.id==="professora");if(!mod){mod={id:"professora",lv:1,title:"Frases da professora",desc:"O que ela diz nas sessões",items:[]};S.custom=(S.custom||[]).concat([mod])}if(mod.items.some(i=>i.zh===zh)){alert("Já está no módulo Frases da professora.");return}mod.items.push({zh:p[0],py:p[2],pt:p[1]});save();alert("Adicionado ao módulo Frases da professora.")}
 function say(kind){const p=SAY[kind];return p[Math.floor(Math.random()*p.length)]}
-function tutorHTML(mood,phrase,extra,sp){return `<div class="tutor"><img class="tav ${sp?"spk":""}" src="${bust(mood)}" alt=""><div class="bubble"><b>${phrase[0]}</b><span>${phrase[1]}${extra?" "+extra:""}</span></div></div>`}
+function tutorHTML(mood,phrase,extra,sp){return `<div class="tutor"><img class="tav ${sp?"spk":""}" src="${bust(mood)}" alt=""><div class="bubble tap" onclick="phraseCard('${esc(phrase[0])}')"><b>${phrase[0]} <span style="font-size:12px;color:var(--muted);font-family:Manrope">🔊</span></b><span>${phrase[1]}${extra?" "+extra:""}</span></div></div>`}
 const TITLES=[[0,"新生","Calouro"],[3,"学生","Estudante"],[6,"硕士生","Mestrando"],[9,"博士生","Doutorando"],[12,"博士后","Pós-doutorando"],[15,"教授","Professor"],[18,"院士","Acadêmico"]];
 function levelOf(xp){let lv=0,need=120,acc=0;while(xp>=acc+need){acc+=need;lv++;need=Math.round(need*1.18)}return{lv,into:xp-acc,need,pct:(xp-acc)/need}}
 function titleOf(lv){let t=TITLES[0];TITLES.forEach(x=>{if(lv>=x[0])t=x});return t}
@@ -703,7 +711,7 @@ function feedback(ok){const it=curItem;const first=!retry;if(first){if(ok){combo
  lastMood=ok?"happy":"sad";lastSay=ok?(combo>=3&&first?say("combo"):say("ok")):say("bad");
  if(ok)confetti(combo>=3?34:14);
  const fb=document.createElement("div");fb.className="fb "+(ok?"ok":"bad");
- fb.innerHTML=`<div class="cheer"><img src="${bust(ok?"happy":"sad")}" alt=""><div><b>${lastSay[0]}</b><span>${lastSay[1]}${first&&ok?` <span class="combo">+${10+Math.min(combo,5)*2} XP</span>`:""}${combo>=3&&ok?` <span class="combo">${combo} seguidos</span>`:""}</span></div></div><h4>${ok?(retry?"Agora sim.":"Correto!"):"Ainda não. A resposta certa:"}</h4><div class="ans tap" onclick="speak('${esc(it.zh)}')">${it.zh} <span class="sm" style="font-family:Manrope;font-weight:600">🔊</span></div><div style="color:var(--ver);font-weight:700">${it.py}</div><div class="sm">${it.pt}</div>${breakdown(it.zh)}<p class="sm" style="margin:6px 0 0">Toque na frase ou em cada caractere para ouvir.</p><div class="pair"><button class="ghost" onclick="speak('${esc(it.zh)}')">🔊</button>${ok?"":`<button class="sec" onclick="redo()">De novo</button>`}<button class="${ok?"pri":""}" style="flex:2" onclick="finishQ(${ok})">Continuar</button></div>`;
+ fb.innerHTML=`<div class="cheer tap" onclick="phraseCard('${esc(lastSay[0])}')"><img src="${bust(ok?"happy":"sad")}" alt=""><div><b>${lastSay[0]} <span style="font-size:12px;color:var(--muted);font-family:Manrope">toque para entender</span></b><span>${lastSay[1]}${first&&ok?` <span class="combo">+${10+Math.min(combo,5)*2} XP</span>`:""}${combo>=3&&ok?` <span class="combo">${combo} seguidos</span>`:""}</span></div></div><h4>${ok?(retry?"Agora sim.":"Correto!"):"Ainda não. A resposta certa:"}</h4><div class="ans tap" onclick="speak('${esc(it.zh)}')">${it.zh} <span class="sm" style="font-family:Manrope;font-weight:600">🔊</span></div><div style="color:var(--ver);font-weight:700">${it.py}</div><div class="sm">${it.pt}</div>${breakdown(it.zh)}<p class="sm" style="margin:6px 0 0">Toque na frase ou em cada caractere para ouvir.</p><div class="pair"><button class="ghost" onclick="speak('${esc(it.zh)}')">🔊</button>${ok?"":`<button class="sec" onclick="redo()">De novo</button>`}<button class="${ok?"pri":""}" style="flex:2" onclick="finishQ(${ok})">Continuar</button></div>`;
  document.querySelector(".ex").appendChild(fb);fb.scrollIntoView({behavior:"smooth",block:"end"});
  setTimeout(()=>{const u=new SpeechSynthesisUtterance(lastSay[0]);u.lang="zh-CN";if(voice)u.voice=voice;u.rate=0.95;speechSynthesis.speak(u)},ok?900:1400)}
 let firstResult=null;
