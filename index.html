@@ -215,7 +215,7 @@ textarea.f{font:inherit;padding:11px 12px;border:1.5px solid var(--line);border-
 <body>
 <div class="wrap">
 <header>
-<div class="brand"><div class="seal">学</div><div><b>Mandarim Acadêmico</b><span id="sub">Universidade, clima e saúde · v14</span></div></div>
+<div class="brand"><div class="seal">学</div><div><b>Mandarim Acadêmico</b><span id="sub">Universidade, clima e saúde · v15</span></div></div>
 <button class="gear" onclick="go('settings')" aria-label="Ajustes"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
 </header>
 <div id="view"></div>
@@ -536,7 +536,7 @@ const CHARS={"吧":["ba","partícula de sugestão"],"准":["zhǔn","preciso, per
 const META={tons:["声","var(--ver)","var(--ver-soft)"],saud:["好","var(--jade)","var(--jade-soft)"],eu:["我","var(--indigo)","var(--indigo-soft)"],num:["十","var(--gold)","var(--gold-soft)"],uni:["学","var(--plum)","var(--plum-soft)"],dir:["路","var(--sky)","var(--sky-soft)"],dia:["茶","var(--jade)","var(--jade-soft)"],car:["研","var(--indigo)","var(--indigo-soft)"],gee:["碳","var(--ver)","var(--ver-soft)"],fogo:["火","var(--gold)","var(--gold-soft)"],saude:["康","var(--plum)","var(--plum-soft)"],pant:["湿","var(--sky)","var(--sky-soft)"],reun:["合","var(--jade)","var(--jade-soft)"],pal:["讲","var(--indigo)","var(--indigo-soft)"]};
 function meta(m){return META[m.id]||[m.title[0],"var(--ink)","var(--mist)"]}
 
-const APP_VERSION="v14";
+const APP_VERSION="v15";
 /* ===== estado ===== */
 const KEY="mandarim_v1";
 let S=load();
@@ -564,6 +564,11 @@ function flat(s){return (s||"").toLowerCase().replace(/[āáǎàēéěèīíǐì
 let voice=null;
 function pickVoice(){const vs=speechSynthesis.getVoices();voice=vs.find(v=>/zh[-_]CN/i.test(v.lang))||vs.find(v=>/^zh/i.test(v.lang))||null}
 if("speechSynthesis" in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
+let voicePT=null;
+function pickVoicePT(){const vs=speechSynthesis.getVoices();voicePT=vs.find(v=>/pt[-_]BR/i.test(v.lang))||vs.find(v=>/^pt/i.test(v.lang))||null}
+if("speechSynthesis" in window){pickVoicePT();const _o=speechSynthesis.onvoiceschanged;speechSynthesis.onvoiceschanged=()=>{pickVoice();pickVoicePT()}}
+function speakPT(t){return new Promise(res=>{if(!("speechSynthesis" in window)||!t){res();return}const u=new SpeechSynthesisUtterance(t);u.lang="pt-BR";if(voicePT)u.voice=voicePT;u.rate=1;u.onend=res;u.onerror=res;speechSynthesis.speak(u)})}
+function speakZH(t){return new Promise(res=>{if(!("speechSynthesis" in window)||!t){res();return}const u=new SpeechSynthesisUtterance(t);u.lang="zh-CN";if(voice)u.voice=voice;u.rate=S.set.voiceRate;u.onend=res;u.onerror=res;speechSynthesis.speak(u)})}
 function speak(t){if(!("speechSynthesis" in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="zh-CN";if(voice)u.voice=voice;u.rate=S.set.voiceRate;speechSynthesis.speak(u)}
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 function normZh(s){return (s||"").replace(/[\s，。？！,.?!、\u3000]/g,"").replace(/[A-Za-z]+/g,x=>x.toLowerCase())}
@@ -579,7 +584,7 @@ async function listenWhisper(lang,onRes,onErr,onStart){let stream;try{stream=awa
  mr.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
  mr.onstop=async()=>{stream.getTracks().forEach(t=>t.stop());if(done)return;done=true;recStopFn=null;if(onStart)onStart("",true);
   const blob=new Blob(chunks,{type:mr.mimeType||"audio/webm"});if(blob.size<2000){onErr("Gravação vazia. Fale mais perto do aparelho.");return}
-  const fd=new FormData();fd.append("file",blob,"fala."+(mr.mimeType.includes("mp4")?"mp4":mr.mimeType.includes("ogg")?"ogg":"webm"));fd.append("model","whisper-1");fd.append("language",lang.startsWith("zh")?"zh":"pt");if(lang.startsWith("zh"))fd.append("prompt","简体中文。");
+  const fd=new FormData();fd.append("file",blob,"fala."+(mr.mimeType.includes("mp4")?"mp4":mr.mimeType.includes("ogg")?"ogg":"webm"));fd.append("model","whisper-1");if(lang!=="auto")fd.append("language",lang.startsWith("zh")?"zh":"pt");if(lang.startsWith("zh"))fd.append("prompt","简体中文。");if(lang==="auto")fd.append("prompt","Conversa em português e 普通话。");
   try{const r=await fetch("https://api.openai.com/v1/audio/transcriptions",{method:"POST",headers:{"Authorization":"Bearer "+S.set.oaKey},body:fd});if(!r.ok){const t=await r.text();onErr("Transcrição falhou ("+r.status+"): "+t.slice(0,120));return}const j=await r.json();const txt=(j.text||"").trim();if(!txt){onErr(ERRPT["no-speech"]);return}onRes([txt])}catch(e){onErr("Erro de rede na transcrição: "+e.message)}};
  mr.start();if(onStart)onStart("");recStopFn=()=>{if(mr.state!=="inactive")mr.stop()};setTimeout(()=>{if(mr.state!=="inactive")mr.stop()},7000)}
 async function listenLang(lang,onRes,onErr,onStart){if(S.set.oaKey)return listenWhisper(lang,onRes,onErr,onStart);if(!SR){onErr("Este navegador não reconhece voz. Use o Chrome no Android, pelo endereço https.");return}
@@ -642,6 +647,7 @@ const SUGG=["Como me apresento para um reitor chinês?","Como explico que Cácer
 let chatBusy=false;
 function chat(){const name=S.set.tutor;const msgs=S.chat.slice(-40);
  V.innerHTML=`<div class="chatwrap"><div class="tutorhead" id="th">${avatarHTML("neutral",false)}<b>${esc(name)}</b><span>${S.set.apiKey?"Pergunte como se diz qualquer coisa":"Modo dicionário. Adicione a chave da API em Ajustes para conversar"}</span>${msgs.length?`<button class="ghost" style="padding:6px 12px;font-size:12px;margin-top:8px" onclick="if(confirm('Apagar toda a conversa?')){S.chat=[];save();render()}">Apagar conversa</button>`:""}</div>
+ <div class="c" style="margin-bottom:10px">${voiceMode?`<p class="sm" id="vmst" style="color:var(--ver);font-weight:700;margin:0 0 6px">…</p><button class="sec" onclick="stopVoiceMode()">Encerrar conversa por voz</button>`:`<button class="pri" onclick="startVoiceMode()">🎙 Conversar por voz</button><p class="sm" style="margin:6px 0 0">Ela cumprimenta, ouve, responde e volta a ouvir. Diga "tchau" para encerrar.</p>`}</div>
  ${msgs.length?"":`<div class="chips sugg">${SUGG.map(s=>`<button class="chip" onclick="askText('${esc(s).replace(/'/g,"\\'")}')">${s}</button>`).join("")}</div>`}
  <div class="msgs" id="msgs">${msgs.map(m=>msgHTML(m)).join("")}</div></div><div style="height:90px"></div>`;
  setTimeout(()=>window.scrollTo(0,document.body.scrollHeight),50)}
@@ -670,6 +676,27 @@ async function askClaude(q){const hist=S.chat.slice(-12,-1).map(m=>({role:m.role
 function chatMic(){const b=document.getElementById("cmic");if(b.classList.contains("rec")&&S.set.oaKey){stopRec();return}const inp=document.getElementById("cin");b.classList.add("rec");inp.placeholder="Fale agora…";
  const lang=S.set.micLang||"pt-BR";listenLang(lang,alts=>{b.classList.remove("rec");inp.placeholder="Pergunte ou fale em chinês";inp.value=alts[0]||"";if(inp.value)sendChat()},err=>{b.classList.remove("rec");inp.placeholder="Pergunte ou fale em chinês";alert(err)},(p,tr)=>{if(tr)inp.placeholder="Transcrevendo…";if(p)inp.value=p})}
 
+/* ===== modo voz contínua ===== */
+let voiceMode=false,vmBusy=false;
+function vmStatus(t){const el=document.getElementById("vmst");if(el)el.textContent=t}
+async function startVoiceMode(){if(!S.set.apiKey){alert("O modo voz precisa da chave da Anthropic em Ajustes.");return}voiceMode=true;if(cur!=="chat")go("chat");else render();
+ setAv("happy",true);vmStatus(S.set.tutor+" está falando…");speechSynthesis.cancel();
+ await speakZH("你好，Ernandes！今天想聊什么？");await speakPT("Olá! O que você quer conversar hoje? Pode falar em português ou em mandarim.");setAv("neutral",false);if(voiceMode)vmListen()}
+function stopVoiceMode(){voiceMode=false;speechSynthesis.cancel();stopRec();if(recObj){try{recObj.abort()}catch(e){}}render()}
+function vmListen(){if(!voiceMode||vmBusy)return;vmBusy=true;const b=document.getElementById("cmic");if(b)b.classList.add("rec");vmStatus("Estou ouvindo… fale");
+ const lang=S.set.oaKey?"auto":(S.set.micLang||"pt-BR");
+ listenLang(lang,async alts=>{vmBusy=false;if(b)b.classList.remove("rec");const t=(alts[0]||"").trim();if(!t){if(voiceMode)setTimeout(vmListen,400);return}
+  if(/\b(tchau|até logo|até amanhã|parar|chega por hoje)\b|再见|拜拜/i.test(t)){vmStatus("Até a próxima.");setAv("happy",true);await speakZH("再见！明天见！");await speakPT("Tchau! Até amanhã.");voiceMode=false;setAv("neutral",false);render();return}
+  const inp=document.getElementById("cin");if(inp)inp.value=t;await sendChatVoice(t)},
+ err=>{vmBusy=false;if(b)b.classList.remove("rec");vmStatus(err);if(voiceMode&&/captei|vazia/i.test(err))setTimeout(vmListen,800)},
+ (p,tr)=>{vmStatus(tr?"Transcrevendo…":"Estou ouvindo… fale"+(p?": "+p:""))})}
+async function sendChatVoice(t){const inp=document.getElementById("cin");if(inp)inp.value="";S.chat.push({id:Date.now(),role:"user",text:t});save();render();
+ chatBusy=true;const box=document.getElementById("msgs");box.insertAdjacentHTML("beforeend",'<div class="m a" id="thinking"><span class="think"><i></i><i></i><i></i></span></div>');setAv("think",false);vmStatus("Pensando…");window.scrollTo(0,document.body.scrollHeight);
+ let data=null,text="";try{data=await askClaude(t)}catch(e){text="Não consegui responder: "+e.message}
+ chatBusy=false;S.chat.push({id:Date.now()+1,role:"assistant",text,data});save();render();window.scrollTo(0,document.body.scrollHeight);
+ if(!voiceMode)return;setAv("happy",true);vmStatus(S.set.tutor+" está falando…");
+ if(data){await speakPT(data.pt||"");if(data.zh){await speakZH(data.zh);await speakPT(data.lit||"")}if(data.follow){await speakZH(data.follow);await speakPT(data.follow_pt||"")}}else await speakPT(text);
+ setAv("neutral",false);if(voiceMode)setTimeout(vmListen,300)}
 /* ===== HOJE ===== */
 function home(){const items=ITEMS(),now=Date.now();const due=items.filter(it=>S.prog[it.key]&&S.prog[it.key].due<=now).length;const seen=Object.keys(S.prog).filter(k=>items.some(i=>i.key===k)).length;const t=S.log[today()]||{n:0,ok:0};
  const seed=parseInt(today().replace(/-/g,""),10);const pool=items.filter(it=>it.zh.length<=4);const cod=pool[seed%pool.length];
@@ -818,5 +845,5 @@ function exportJSON(){const b=new Blob([JSON.stringify(S,null,1)],{type:"applica
 function importJSON(inp,kind){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);
  if(kind==="prog"){if(!d.prog||!d.log)throw 0;S={...S,...d,v:2,tests:d.tests||[],custom:d.custom||S.custom};save();alert("Progresso importado.")}
  else{if(!Array.isArray(d.modules))throw 0;d.modules.forEach(m=>{if(!m.id||!Array.isArray(m.items))throw 0;S.custom=(S.custom||[]).filter(x=>x.id!==m.id);S.custom.push(m)});save();alert(d.modules.length+" módulo(s) importado(s).")}go("home")}catch(e){alert("Arquivo inválido.")}};r.readAsText(f)}
-render();
+if(new URLSearchParams(location.search).get("voz")){cur="chat";document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("on",x.dataset.v==="chat"));render();const d=document.createElement("div");d.className="lvup";d.innerHTML=`<div><img class="fullav" src="${IMG.f_present}" alt=""><h2>${S.set.tutor} está pronta</h2><p class="sm">O navegador exige um toque antes de falar.</p><button class="pri lg" onclick="this.closest('.lvup').remove();startVoiceMode()">Começar a conversa</button></div>`;document.body.appendChild(d)}else render();
 </script></body></html>
